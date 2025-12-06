@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan tinker:*)",
+      "Bash(php artisan make:migration:*)",
+      "Bash(php artisan migrate:*)",
+      "Bash(php artisan db:show:*)",
+      "Bash(php artisan:*)",
+      "Bash(if not exist \"c:\\thesis_hris_module_2\\hris\\resources\\views\\exports\" mkdir \"c:\\thesis_hris_module_2\\hris\\resources\\views\\exports\")",
+      "Bash(if not exist \"c:\\thesis_hris_module_2\\hris\\resources\\views\\admin\\salary-grades\" mkdir \"c:\\thesis_hris_module_2\\hris\\resources\\views\\admin\\salary-grades\")",
+      "Bash(if not exist \"c:\\thesis_hris_module_2\\hris\\resources\\views\\admin\\payroll\" mkdir \"c:\\thesis_hris_module_2\\hris\\resources\\views\\admin\\payroll\")",
+      "Bash(dir \"c:\\thesis_hris_module_2\\hris\" /s /b)",
+      "Bash(dir \"c:\\thesis_hris_module_2\\hris\" /s)",
+      "Bash(find:*)",
+      "Bash(npm run build:*)",
+      "Bash(if not exist \"app\\Exports\" mkdir \"app\\Exports\")",
+      "Bash(dir /s /b \"c:\\thesis_hris_module_2\\hris\")",
+      "Bash(test:*)",
+      "Bash(composer require:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

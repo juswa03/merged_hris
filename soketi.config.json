@@ -1,0 +1,22 @@
+{
+  "debug": true,
+  "port": 6001,
+  "appManager": {
+    "driver": "array",
+    "cache": {
+      "enabled": false,
+      "ttl": -1
+    },
+    "array": {
+      "apps": [
+        {
+          "id": "bipsu-hrmis-module-2",
+          "key": "joshua-pogi",
+          "secret": "ako-si-superman",
+          "enabled": true,
+          "name": "BiPSU HRMIS"
+        }
+      ]
+    }
+  }
+}

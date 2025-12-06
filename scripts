@@ -1,0 +1,670 @@
+@extends('layouts.app')
+
+@section('title', 'Biometric Enrollment')
+
+@section('content')
+<style>
+        [x-cloak] { display: none !important; }
+        
+        .pulse-animation {
+            animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse-custom {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        .fingerprint-scanner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .enrollment-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .enrollment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+        
+        .status-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .status-badge:hover::before {
+            left: 100%;
+        }
+    </style>
+    <div class="min-h-screen" x-data="biometricEnrollmentModule()" x-cloak>
+        <!-- Header -->
+        <div class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-fingerprint text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h1 class="text-2xl font-bold text-gray-900">Biometric Enrollment</h1>
+                            <p class="text-sm text-gray-500">Manage employee fingerprint enrollment</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-blue-50 px-4 py-2 rounded-lg">
+                            <span class="text-sm font-medium text-blue-700">
+                                <i class="fas fa-users mr-2"></i>
+                                <span x-text="unenrolledEmployees.length"></span> Pending Enrollment
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- Search and Filter Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                    <div class="flex-1 max-w-md">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input 
+                                x-model="searchQuery" 
+                                @input="filterEmployees()"
+                                type="text" 
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150" 
+                                placeholder="Search by name, ID, or department..."
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <select 
+                            x-model="selectedDepartment" 
+                            @change="filterEmployees()"
+                            class="block w-48 pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 rounded-lg transition duration-150"
+                        >
+                            <option value="">All Departments</option>
+                            <option value="STCS">STCS</option>
+                            <option value="SOE">SOE</option>
+                            <option value="STED">STED</option>
+                            <option value="SNHS">SNHS</option>
+                            <option value="SCJE">SCJE</option>
+                            <option value="SME">SME</option>
+                            <option value="SAS">SAS</option>
+                        </select>
+                        
+                        <button 
+                            @click="refreshEmployeeList()"
+                            class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition duration-150 flex items-center"
+                        >
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrollment Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue-500">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-users text-blue-500 text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Total Employees</p>
+                            <p class="text-2xl font-semibold text-gray-900" x-text="totalEmployees"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-green-500">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Enrolled</p>
+                            <p class="text-2xl font-semibold text-gray-900" x-text="enrolledCount"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-yellow-500">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock text-yellow-500 text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Pending</p>
+                            <p class="text-2xl font-semibold text-gray-900" x-text="unenrolledEmployees.length"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-purple-500">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-percentage text-purple-500 text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Enrollment Rate</p>
+                            <p class="text-2xl font-semibold text-gray-900" x-text="enrollmentPercentage + '%'"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employees List -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                    <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                        <i class="fas fa-list-ul mr-2"></i>
+                        Employees Pending Biometric Enrollment
+                        <span class="ml-2 px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full" x-text="filteredEmployees.length + ' employees'"></span>
+                    </h3>
+                </div>
+
+                <!-- Employee Grid -->
+                <div class="p-6">
+                    <template x-if="filteredEmployees.length > 0">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <template x-for="employee in paginatedEmployees" :key="employee.id">
+                                <div class="enrollment-card bg-white rounded-lg p-6">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div class="flex items-center">
+                                            <img 
+                                                :src="employee.photo_url || '/api/placeholder/64/64'" 
+                                                :alt="employee.first_name + ' ' + employee.last_name"
+                                                class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                                            >
+                                            <div class="ml-3">
+                                                <h4 class="text-sm font-semibold text-gray-900" x-text="employee.first_name + ' ' + employee.last_name"></h4>
+                                                <p class="text-xs text-gray-500" x-text="'ID: ' + employee.id"></p>
+                                            </div>
+                                        </div>
+                                        <span class="status-badge bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-1 rounded-full">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            Pending
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <i class="fas fa-building w-4 text-gray-400 mr-2"></i>
+                                            <span x-text="employee.department.name"></span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <i class="fas fa-briefcase w-4 text-gray-400 mr-2"></i>
+                                            <span x-text="employee.position.name"></span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <i class="fas fa-envelope w-4 text-gray-400 mr-2"></i>
+                                            <span x-text="employee.user.email"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button 
+                                        @click="startEnrollment(employee)"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-150 flex items-center justify-center group"
+                                    >
+                                        <i class="fas fa-fingerprint mr-2 group-hover:scale-110 transition-transform"></i>
+                                        Enroll Biometric
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    
+                    <template x-if="filteredEmployees.length === 0">
+                        <div class="text-center py-12">
+                            <div class="mx-auto w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                                <i class="fas fa-check-circle text-green-500 text-3xl"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">All employees enrolled!</h3>
+                            <p class="text-gray-500">
+                                <template x-if="searchQuery || selectedDepartment">
+                                    <span>No employees match your search criteria.</span>
+                                </template>
+                                <template x-if="!searchQuery && !selectedDepartment">
+                                    <span>All employees have completed biometric enrollment.</span>
+                                </template>
+                            </p>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Pagination -->
+                <div x-show="totalPages > 1" class="bg-gray-50 px-6 py-3 flex items-center justify-between border-t border-gray-200">
+                    <div class="flex-1 flex justify-between sm:hidden">
+                        <button 
+                            @click="currentPage = Math.max(1, currentPage - 1)"
+                            :disabled="currentPage === 1"
+                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                        >
+                            Previous
+                        </button>
+                        <button 
+                            @click="currentPage = Math.min(totalPages, currentPage + 1)"
+                            :disabled="currentPage === totalPages"
+                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                        >
+                            Next
+                        </button>
+                    </div>
+                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                        <div>
+                            <p class="text-sm text-gray-700">
+                                Showing <span class="font-medium" x-text="(currentPage - 1) * pageSize + 1"></span> to 
+                                <span class="font-medium" x-text="Math.min(currentPage * pageSize, filteredEmployees.length)"></span> of 
+                                <span class="font-medium" x-text="filteredEmployees.length"></span> employees
+                            </p>
+                        </div>
+                        <div>
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                <template x-for="page in visiblePages" :key="page">
+                                    <button 
+                                        @click="currentPage = page"
+                                        :class="{'z-10 bg-blue-50 border-blue-500 text-blue-600': currentPage === page}"
+                                        class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium transition duration-150"
+                                        x-text="page"
+                                    ></button>
+                                </template>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biometric Enrollment Modal -->
+        <div 
+            x-show="isEnrollmentModalOpen" 
+            @keydown.escape.window="closeEnrollmentModal()"
+            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center"
+            style="display: none;"
+            x-transition
+        >
+            <div class="relative mx-auto p-8 border w-full max-w-md shadow-2xl rounded-2xl bg-white" @click.stop>
+                <div class="text-center">
+                    <!-- Header -->
+                    <div class="mb-6">
+                        <div class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-fingerprint text-blue-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Biometric Enrollment</h3>
+                        <p class="text-sm text-gray-500" x-show="selectedEmployee">
+                            <span x-text="selectedEmployee?.first_name + ' ' + selectedEmployee?.last_name"></span>
+                            <br>
+                            <span class="text-xs" x-text="'ID: ' + selectedEmployee?.id"></span>
+                        </p>
+                    </div>
+
+                    <!-- Fingerprint Scanner Animation -->
+                    <div class="mb-8">
+                        <div class="fingerprint-scanner mx-auto w-32 h-32 rounded-full flex items-center justify-center mb-4" 
+                             :class="{'pulse-animation': enrollmentStep === 'scanning'}">
+                            <i class="fas fa-fingerprint text-white text-4xl" 
+                               :class="{'animate-pulse': enrollmentStep === 'scanning'}"></i>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <template x-if="enrollmentStep === 'ready'">
+                                <div>
+                                    <p class="text-lg font-medium text-gray-900">Ready to Scan</p>
+                                    <p class="text-sm text-gray-500">Click start to begin fingerprint enrollment</p>
+                                </div>
+                            </template>
+                            
+                            <template x-if="enrollmentStep === 'scanning'">
+                                <div>
+                                    <p class="text-lg font-medium text-blue-600">Scanning...</p>
+                                    <p class="text-sm text-gray-500">Place finger on the scanner</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" 
+                                             :style="`width: ${scanProgress}%`"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-1" x-text="`${scanProgress}% complete`"></p>
+                                </div>
+                            </template>
+                            
+                            <template x-if="enrollmentStep === 'success'">
+                                <div>
+                                    <p class="text-lg font-medium text-green-600">
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                        Enrollment Successful!
+                                    </p>
+                                    <p class="text-sm text-gray-500">Biometric data has been saved</p>
+                                </div>
+                            </template>
+                            
+                            <template x-if="enrollmentStep === 'failed'">
+                                <div>
+                                    <p class="text-lg font-medium text-red-600">
+                                        <i class="fas fa-exclamation-circle mr-2"></i>
+                                        Enrollment Failed
+                                    </p>
+                                    <p class="text-sm text-gray-500">Please try again or contact support</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center space-x-3">
+                        <template x-if="enrollmentStep === 'ready'">
+                            <div class="flex space-x-3">
+                                <button 
+                                    @click="closeEnrollmentModal()"
+                                    class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    @click="startScanning()"
+                                    class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-150 flex items-center"
+                                >
+                                    <i class="fas fa-play mr-2"></i>
+                                    Start Enrollment
+                                </button>
+                            </div>
+                        </template>
+                        
+                        <template x-if="enrollmentStep === 'scanning'">
+                            <button 
+                                @click="stopScanning()"
+                                class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-150"
+                            >
+                                <i class="fas fa-stop mr-2"></i>
+                                Stop
+                            </button>
+                        </template>
+                        
+                        <template x-if="enrollmentStep === 'success'">
+                            <button 
+                                @click="completeEnrollment()"
+                                class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-150"
+                            >
+                                <i class="fas fa-check mr-2"></i>
+                                Complete
+                            </button>
+                        </template>
+                        
+                        <template x-if="enrollmentStep === 'failed'">
+                            <div class="flex space-x-3">
+                                <button 
+                                    @click="closeEnrollmentModal()"
+                                    class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    @click="retryEnrollment()"
+                                    class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-150"
+                                >
+                                    <i class="fas fa-redo mr-2"></i>
+                                    Retry
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@push('scripts')
+    <script>
+        function biometricEnrollmentModule() {
+            return {
+                allEmployees: @json($all_employees),
+                // Filter and search
+                searchQuery: '',
+                selectedDepartment: '',
+                currentPage: 1,
+                pageSize: 9,
+                
+                // Modal states
+                isEnrollmentModalOpen: false,
+                selectedEmployee: null,
+                enrollmentStep: 'ready', // ready, scanning, success, failed
+                scanProgress: 0,
+                scanningInterval: null,
+                
+                // Computed properties
+                get unenrolledEmployees() {
+                    return this.allEmployees.filter(emp => !emp.biometric_enrolled);
+                },
+                
+                get totalEmployees() {
+                    return this.allEmployees.length;
+                },
+                
+                get enrolledCount() {
+                    return this.allEmployees.filter(emp => emp.biometric_enrolled).length;
+                },
+                
+                get enrollmentPercentage() {
+                    if (this.totalEmployees === 0) return 0;
+                    return Math.round((this.enrolledCount / this.totalEmployees) * 100);
+                },
+                
+                get filteredEmployees() {
+                    let filtered = this.unenrolledEmployees;
+                    
+                    // Filter by search query
+                    if (this.searchQuery) {
+                        const query = this.searchQuery.toLowerCase();
+                        filtered = filtered.filter(emp => 
+                            emp.first_name.toLowerCase().includes(query) || 
+                            emp.last_name.toLowerCase().includes(query) ||
+                            emp.email.toLowerCase().includes(query) ||
+                            emp.id.toLowerCase().includes(query) ||
+                            emp.department.toLowerCase().includes(query)
+                        );
+                    }
+                    
+                    // Filter by department
+                    if (this.selectedDepartment) {
+                        filtered = filtered.filter(emp => emp.department === this.selectedDepartment);
+                    }
+                    
+                    return filtered;
+                },
+                
+                get totalPages() {
+                    return Math.ceil(this.filteredEmployees.length / this.pageSize);
+                },
+                
+                get visiblePages() {
+                    const pages = [];
+                    const maxVisible = 5;
+                    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+                    let endPage = Math.min(this.totalPages, startPage + maxVisible - 1);
+                    
+                    if (endPage - startPage + 1 < maxVisible) {
+                        startPage = Math.max(1, endPage - maxVisible + 1);
+                    }
+                    
+                    for (let i = startPage; i <= endPage; i++) {
+                        pages.push(i);
+                    }
+                    
+                    return pages;
+                },
+                
+                get paginatedEmployees() {
+                    const start = (this.currentPage - 1) * this.pageSize;
+                    return this.filteredEmployees.slice(start, start + this.pageSize);
+                },
+                
+                // Methods
+                filterEmployees() {
+                    this.currentPage = 1;
+                },
+                
+                refreshEmployeeList() {
+                    // In real implementation, this would reload data from the server
+                    this.showToast('Employee list refreshed', 'success');
+                },
+                
+                startEnrollment(employee) {
+                    this.selectedEmployee = employee;
+                    this.enrollmentStep = 'ready';
+                    this.scanProgress = 0;
+                    this.isEnrollmentModalOpen = true;
+                },
+                
+                closeEnrollmentModal() {
+                    this.isEnrollmentModalOpen = false;
+                    this.selectedEmployee = null;
+                    this.enrollmentStep = 'ready';
+                    this.scanProgress = 0;
+                    if (this.scanningInterval) {
+                        clearInterval(this.scanningInterval);
+                    }
+                },
+                
+                startScanning() {
+                    this.enrollmentStep = 'scanning';
+                    this.scanProgress = 0;
+                    
+                    // Simulate scanning progress
+                    this.scanningInterval = setInterval(() => {
+                        this.scanProgress += Math.random() * 15 + 5;
+                        
+                        if (this.scanProgress >= 100) {
+                            clearInterval(this.scanningInterval);
+                            this.scanProgress = 100;
+                            
+                            // Simulate success/failure (90% success rate)
+                            setTimeout(() => {
+                                if (Math.random() > 0.1) {
+                                    this.enrollmentStep = 'success';
+                                } else {
+                                    this.enrollmentStep = 'failed';
+                                }
+                            }, 500);
+                        }
+                    }, 200);
+                },
+                
+                stopScanning() {
+                    if (this.scanningInterval) {
+                        clearInterval(this.scanningInterval);
+                    }
+                    this.enrollmentStep = 'ready';
+                    this.scanProgress = 0;
+                },
+                
+                retryEnrollment() {
+                    this.enrollmentStep = 'ready';
+                    this.scanProgress = 0;
+                },
+                
+                completeEnrollment() {
+                    if (this.selectedEmployee) {
+                        // Update employee status
+                        const employeeIndex = this.allEmployees.findIndex(emp => emp.id === this.selectedEmployee.id);
+                        if (employeeIndex !== -1) {
+                            this.allEmployees[employeeIndex].biometric_enrolled = true;
+                        }
+                        
+                        // In real implementation, send data to server
+                        this.saveEnrollmentData(this.selectedEmployee);
+                        
+                        this.showToast(`Biometric enrollment completed for ${this.selectedEmployee.first_name} ${this.selectedEmployee.last_name}`, 'success');
+                        this.closeEnrollmentModal();
+                    }
+                },
+                
+                saveEnrollmentData(employee) {
+                    // This would be an actual API call in real implementation
+                    console.log('Saving biometric data for employee:', employee.id);
+                    
+                    // Simulate API call
+                    /*
+                    fetch('/api/biometric-enrollment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                        body: JSON.stringify({
+                            employee_id: employee.id,
+                            biometric_data: 'encoded_fingerprint_data',
+                            enrollment_date: new Date().toISOString()
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.showToast('Biometric data saved successfully', 'success');
+                        } else {
+                            this.showToast('Failed to save biometric data', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        this.showToast('Network error occurred', 'error');
+                        console.error('Error:', error);
+                    });
+                    */
+                },
+                
+                showToast(message, type = 'success') {
+                    const toast = document.createElement('div');
+                    toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white z-50 transform translate-x-full transition-transform duration-300 ${
+                        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                    }`;
+                    toast.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                            ${message}
+                        </div>
+                    `;
+                    document.body.appendChild(toast);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        toast.classList.remove('translate-x-full');
+                    }, 100);
+                    
+                    // Animate out and remove
+                    setTimeout(() => {
+                        toast.classList.add('translate-x-full');
+                        setTimeout(() => toast.remove(), 300);
+                    }, 3000);
+                },
+                
+                // Initialize component
+                init() {
+                    console.log('Biometric Enrollment Module initialized');
+                }
+            };
+        }
+    </script>
+
+@endpush
+@endsection
