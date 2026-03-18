@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Edit Role')
 
@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3">
-            <a href="{{ route('roles.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.roles.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -40,7 +40,7 @@
         <!-- Edit Form -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <form action="{{ route('roles.update', $role->id) }}" method="POST">
+                <form action="{{ route('admin.roles.update', $role->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -83,7 +83,7 @@
 
                         <!-- Form Actions -->
                         <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-                            <a href="{{ route('roles.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
+                            <a href="{{ route('admin.roles.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </a>
                             <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">

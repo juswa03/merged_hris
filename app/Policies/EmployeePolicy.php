@@ -14,7 +14,7 @@ class EmployeePolicy
      */
     public function viewAny(User $user): bool
     {
-        $allowedRoles = ['Super Admin', 'Admin', 'HR', 'hr'];
+        $allowedRoles = ['Super Admin', 'Admin', 'HR', 'hr', 'HR Staff'];
         return in_array($user->role->name ?? '', $allowedRoles);
     }
 
@@ -24,7 +24,7 @@ class EmployeePolicy
     public function view(User $user, Employee $employee): bool
     {
         // Super Admin, Admin and HR can view all employees
-        $adminRoles = ['Super Admin', 'Admin', 'HR', 'hr'];
+        $adminRoles = ['Super Admin', 'Admin', 'HR', 'hr', 'HR Staff'];
         if (in_array($user->role->name ?? '', $adminRoles)) {
             return true;
         }
@@ -40,7 +40,7 @@ class EmployeePolicy
      */
     public function create(User $user): bool
     {
-        $allowedRoles = ['Super Admin', 'Admin', 'HR', 'hr'];
+        $allowedRoles = ['Super Admin', 'Admin', 'HR', 'hr', 'HR Staff'];
         return in_array($user->role->name ?? '', $allowedRoles);
     }
 
@@ -50,7 +50,7 @@ class EmployeePolicy
     public function update(User $user, Employee $employee): bool
     {
         // Super Admin, Admin and HR can update all employees
-        $adminRoles = ['Super Admin', 'Admin', 'HR', 'hr'];
+        $adminRoles = ['Super Admin', 'Admin', 'HR', 'hr', 'HR Staff'];
         if (in_array($user->role->name ?? '', $adminRoles)) {
             return true;
         }

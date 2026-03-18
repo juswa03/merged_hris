@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payroll Detailed Breakdown with DTR')
 
@@ -9,7 +9,7 @@
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('payroll.index') }}" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
+                    <a href="{{ route('admin.payroll.index') }}" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
                         <i class="fas fa-money-bill-wave mr-2"></i>
                         Payroll Management
                     </a>
@@ -30,7 +30,7 @@
             <h1 class="text-3xl font-bold text-gray-900">Payroll Breakdown with DTR Integration</h1>
             <p class="mt-2 text-sm text-gray-600">Complete breakdown showing how DTR affects payroll calculations</p>
         </div>
-        <a href="{{ route('payroll.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded flex items-center">
+        <a href="{{ route('admin.payroll.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded flex items-center">
             <i class="fas fa-arrow-left mr-2"></i> Back
         </a>
     </div>

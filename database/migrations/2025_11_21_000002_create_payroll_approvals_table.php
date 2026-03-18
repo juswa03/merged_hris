@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->foreignId('payroll_period_id')->constrained('tbl_payroll_periods')->onDelete('cascade');
                 // Use unsignedBigInteger explicitly to be safe, though foreignId does this.
                 // If users table uses integer, this might fail.
-                $table->foreignId('approver_id')->constrained('users')->onDelete('restrict');
+                $table->foreignId('approver_id')->constrained('tbl_users')->onDelete('restrict');
                 $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
                 $table->timestamp('approved_at')->nullable();
                 $table->text('notes')->nullable();

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payslip - ' . $payroll->employee->first_name . ' ' . $payroll->employee->last_name)
 
@@ -6,14 +6,14 @@
 <div class="container mx-auto px-4 py-6">
     <!-- Action Buttons (Hide on Print) -->
     <div class="no-print mb-4 flex justify-between items-center">
-        <a href="{{ route('payroll.payslips') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors">
+        <a href="{{ route('admin.payroll.payslips') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors">
             <i class="fas fa-arrow-left mr-2"></i> Back to Payslips
         </a>
         <div class="flex gap-2">
             <button onclick="window.print()" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
                 <i class="fas fa-print mr-2"></i> Print
             </button>
-            <a href="{{ route('payroll.download-payslip', $payroll->id) }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+            <a href="{{ route('admin.payroll.download-payslip', $payroll->id) }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
                 <i class="fas fa-file-pdf mr-2"></i> Download PDF
             </a>
         </div>

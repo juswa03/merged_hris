@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Create Position')
 
@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3">
-            <a href="{{ route('positions.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.positions.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -37,7 +37,7 @@
     @endif
 
     <!-- Form -->
-    <form action="{{ route('positions.store') }}" method="POST" class="bg-white rounded-lg shadow-md">
+    <form action="{{ route('admin.positions.store') }}" method="POST" class="bg-white rounded-lg shadow-md">
         @csrf
 
         <div class="p-6 space-y-6">
@@ -215,7 +215,7 @@
 
         <!-- Form Actions -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
-            <a href="{{ route('positions.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+            <a href="{{ route('admin.positions.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
                 Cancel
             </a>
             <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">

@@ -1,183 +1,97 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>DTR - {{ $monthYear }}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .header h2, .header h3 {
-            margin: 0;
-            padding: 0;
-        }
-        .header p {
-            margin: 2px 0;
-            font-size: 10px;
-        }
-        .employee-info {
-            margin-bottom: 10px;
-            width: 100%;
-        }
-        .employee-info td {
-            padding: 2px;
-        }
-        .dtr-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-        }
-        .dtr-table th, .dtr-table td {
-            border: 1px solid #000;
-            padding: 3px;
-            text-align: center;
-        }
-        .dtr-table th {
-            background-color: #f0f0f0;
-        }
-        .weekend {
-            background-color: #f9f9f9;
-            font-style: italic;
-        }
-        .footer {
-            margin-top: 20px;
-        }
-        .signature-line {
-            border-bottom: 1px solid #000;
-            width: 200px;
-            margin: 30px auto 5px auto;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-left {
-            text-align: left;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .font-bold {
-            font-weight: bold;
-        }
-        .page-break {
-            page-break-after: always;
-        }
-    </style>
-</head>
-<body>
-    <table style="width: 100%; margin-bottom: 10px;">
+<table>
+    <thead>
         <tr>
-            <td style="width: 30%; text-align: left; vertical-align: top;">
-                <p style="font-size: 9px; margin: 0;">Civil Service Form No. 48</p>
+            <th colspan="7" style="text-align: center; font-size: 14px; font-weight: bold;">
+                Civil Service Form No. 48
+            </th>
+        </tr>
+        <tr>
+            <th colspan="7" style="text-align: center; font-size: 16px; font-weight: bold;">
+                DAILY TIME RECORD
+            </th>
+        </tr>
+        <tr>
+            <th colspan="7" style="text-align: left; padding: 5px;">
+                Name: <span style="font-weight: normal;">{{ strtoupper($employee->first_name . ' ' . ($employee->middle_name ? $employee->middle_name[0] . '. ' : '') . $employee->last_name) }}</span>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="7" style="text-align: left; padding: 5px;">
+                Department: <span style="font-weight: normal;">{{ $employee->department->name ?? 'N/A' }}</span>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="7" style="text-align: left; padding: 5px;">
+                Position: <span style="font-weight: normal;">{{ $employee->position->title ?? 'N/A' }}</span>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="7" style="text-align: center; padding: 5px; font-size: 14px;">
+                For the month of: <span style="font-weight: bold;">{{ strtoupper($monthYear) }}</span>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="7" style="padding: 5px;"></th>
+        </tr>
+        <tr style="background-color: #4472C4; color: white; text-align: center;">
+            <th rowspan="2" style="padding: 8px; vertical-align: middle;">DAY</th>
+            <th colspan="2" style="padding: 8px;">A.M.</th>
+            <th colspan="2" style="padding: 8px;">P.M.</th>
+            <th rowspan="2" style="padding: 8px; vertical-align: middle;">UNDERTIME</th>
+            <th rowspan="2" style="padding: 8px; vertical-align: middle;">REMARKS</th>
+        </tr>
+        <tr style="background-color: #4472C4; color: white; text-align: center;">
+            <th style="padding: 8px;">ARRIVAL</th>
+            <th style="padding: 8px;">DEPARTURE</th>
+            <th style="padding: 8px;">ARRIVAL</th>
+            <th style="padding: 8px;">DEPARTURE</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($daysInMonth as $dayData)
+        <tr>
+            <td style="text-align: center; padding: 5px;">{{ $dayData['day'] }}</td>
+            <td style="text-align: center; padding: 5px;">{{ $dayData['am_arrival'] }}</td>
+            <td style="text-align: center; padding: 5px;">{{ $dayData['am_departure'] }}</td>
+            <td style="text-align: center; padding: 5px;">{{ $dayData['pm_arrival'] }}</td>
+            <td style="text-align: center; padding: 5px;">{{ $dayData['pm_departure'] }}</td>
+            <td style="text-align: center; padding: 5px;">{{ $dayData['undertime_hours'] }}</td>
+            <td style="padding: 5px;">{{ $dayData['remarks'] }}</td>
+        </tr>
+        @endforeach
+        <tr>
+            <td colspan="5" style="text-align: right; padding: 8px; font-weight: bold;">Total Undertime:</td>
+            <td style="text-align: center; padding: 8px; font-weight: bold;">{{ $totalUndertime }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="7" style="padding: 10px;"></td>
+        </tr>
+        <tr>
+            <td colspan="7" style="padding: 5px; font-size: 11px; font-style: italic;">
+                I certify on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.
             </td>
-            <td style="width: 40%; text-align: center; vertical-align: top;">
-                <h3 style="margin: 0; padding: 0;">DAILY TIME RECORD</h3>
-                <p style="margin: 2px 0; font-size: 10px;">For the month of <strong>{{ $monthYear }}</strong></p>
+        </tr>
+        <tr>
+            <td colspan="7" style="padding: 20px 5px 5px 5px;">
+                <div style="text-align: center;">
+                    _________________________________<br>
+                    <span style="font-weight: bold;">{{ strtoupper($employee->first_name . ' ' . $employee->last_name) }}</span>
+                </div>
             </td>
-            <td style="width: 30%;"></td>
-        </tr>
-    </table>
-
-    <table class="employee-info">
-        <tr>
-            <td width="15%"><strong>Name:</strong></td>
-            <td style="border-bottom: 1px solid #000;">{{ strtoupper($employee->last_name) }}, {{ strtoupper($employee->first_name) }} {{ strtoupper($employee->middle_name) }}</td>
         </tr>
         <tr>
-            <td><strong>Position:</strong></td>
-            <td style="border-bottom: 1px solid #000;">{{ $employee->position->name ?? 'N/A' }}</td>
+            <td colspan="7" style="padding: 20px 5px 5px 5px;">
+                VERIFIED as to the prescribed office hours:
+            </td>
         </tr>
         <tr>
-            <td><strong>Office:</strong></td>
-            <td style="border-bottom: 1px solid #000;">{{ $employee->department->name ?? 'N/A' }}</td>
+            <td colspan="7" style="padding: 20px 5px 5px 5px;">
+                <div style="text-align: center;">
+                    _________________________________<br>
+                    <span style="font-weight: bold;">IN-CHARGE</span>
+                </div>
+            </td>
         </tr>
-    </table>
-
-    <p style="text-align: center; font-style: italic; font-size: 10px; margin: 5px 0;">
-        Official Hours: Arrival 8:00 AM | Departure 5:00 PM
-    </p>
-
-    <table class="dtr-table">
-        <thead>
-            <tr>
-                <th rowspan="2" width="5%">Day</th>
-                <th colspan="2">A.M.</th>
-                <th colspan="2">P.M.</th>
-                <th colspan="2">Undertime</th>
-                <th colspan="2">Overtime</th>
-            </tr>
-            <tr>
-                <th>Arrival</th>
-                <th>Departure</th>
-                <th>Arrival</th>
-                <th>Departure</th>
-                <th>Hrs</th>
-                <th>Mins</th>
-                <th>Hrs</th>
-                <th>Mins</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($dtrEntries as $entry)
-            @php
-                $isWeekend = $entry->is_weekend;
-                $rowClass = $isWeekend ? 'weekend' : '';
-            @endphp
-            <tr class="{{ $rowClass }}">
-                <td>{{ \Carbon\Carbon::parse($entry->dtr_date)->format('d') }}</td>
-                
-                <!-- AM -->
-                <td>{{ $entry->am_arrival ?? '' }}</td>
-                <td>{{ $entry->am_departure ?? '' }}</td>
-                
-                <!-- PM -->
-                <td>{{ $entry->pm_arrival ?? '' }}</td>
-                <td>{{ $entry->pm_departure ?? '' }}</td>
-                
-                <!-- Undertime -->
-                <td>{{ $entry->under_time_minutes > 0 ? floor($entry->under_time_minutes / 60) : '' }}</td>
-                <td>{{ $entry->under_time_minutes > 0 ? ($entry->under_time_minutes % 60) : '' }}</td>
-
-                <!-- Overtime -->
-                <td>{{ $entry->over_time_hours > 0 ? $entry->over_time_hours : '' }}</td>
-                <td>{{ $entry->over_time_minutes > 0 ? $entry->over_time_minutes : '' }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5" class="text-right"><strong>TOTAL</strong></td>
-                <td><strong>{{ floor($totalUndertime / 60) }}</strong></td>
-                <td><strong>{{ $totalUndertime % 60 }}</strong></td>
-                <td><strong>{{ $totalOvertimeHours ?? 0 }}</strong></td>
-                <td><strong>{{ $totalOvertimeMinutes ?? 0 }}</strong></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <div class="footer">
-        <p>I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
-        
-        <div class="text-center">
-            <div class="signature-line"></div>
-            <p><strong>{{ strtoupper($employee->first_name) }} {{ strtoupper($employee->last_name) }}</strong><br>Employee</p>
-        </div>
-
-        <div class="text-center" style="margin-top: 20px;">
-            <p>Verified as to the prescribed office hours:</p>
-            <div class="signature-line"></div>
-            <p><strong>{{ strtoupper($certifiedBy->name ?? 'SUPERVISOR') }}</strong><br>Immediate Supervisor</p>
-        </div>
-
-        <div class="text-center" style="margin-top: 20px;">
-            <div class="signature-line"></div>
-            <p><strong>{{ strtoupper($verifiedBy->name ?? 'HR OFFICER') }}</strong><br>Verified by (HR/Authorized Officer)</p>
-        </div>
-    </div>
-</body>
-</html>
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Role Details')
 
@@ -8,7 +8,7 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('roles.index') }}" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ route('admin.roles.index') }}" class="text-gray-600 hover:text-gray-900">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('roles.edit', $role->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
+                <a href="{{ route('admin.roles.edit', $role->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
                     <i class="fas fa-edit mr-2"></i> Edit
                 </a>
                 <button onclick="deleteRole()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">
@@ -122,7 +122,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                    <a href="{{ route('users.show', $user->id) }}"
+                                    <a href="{{ route('admin.users.show', $user->id) }}"
                                        class="text-blue-600 hover:text-blue-900"
                                        title="View User">
                                         <i class="fas fa-eye"></i>
@@ -190,7 +190,7 @@
 <script>
 function deleteRole() {
     if (confirm('Are you sure you want to delete this role? This action cannot be undone.')) {
-        fetch('/roles/{{ $role->id }}', {
+        fetch('/admin/roles/{{ $role->id }}', {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -201,7 +201,7 @@ function deleteRole() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = '{{ route("roles.index") }}';
+                window.location.href = '{{ route("admin.roles.index") }}';
             } else {
                 alert(data.message);
             }

@@ -1,182 +1,203 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payroll Audit History')
 
 @section('content')
-<div class="w-full px-6 py-6 max-w-7xl mx-auto">
+<div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
     <x-admin.page-header
         title="Payroll Audit History"
         description="Track all changes, approvals, and modifications to payroll records"
     >
         <x-slot name="actions">
-            <a href="{{ route('payroll.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Payroll
-            </a>
+            <x-admin.action-button href="{{ route('admin.payroll.index') }}" variant="secondary" icon="fas fa-arrow-left">
+                Back to Payroll
+            </x-admin.action-button>
         </x-slot>
     </x-admin.page-header>
 
     <!-- Filters -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <i class="fas fa-filter text-blue-600"></i> Filter Audit Records
-        </h3>
-        <form id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <x-admin.card title="Filter Audit Records" class="mb-6">
+        <form action="{{ route('admin.payroll.audit-history') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Employee</label>
-                <select name="employee_id" id="employeeFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <label for="employee_id" class="block text-sm font-medium text-gray-700 mb-1">Employee</label>
+                <select name="employee_id" id="employee_id" class="w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm sm:text-sm">
                     <option value="">All Employees</option>
                     @foreach($employees ?? [] as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                        <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                            {{ $employee->first_name }} {{ $employee->last_name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Action</label>
-                <select name="action" id="actionFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <label for="action" class="block text-sm font-medium text-gray-700 mb-1">Action</label>
+                <select name="action" id="action" class="w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm sm:text-sm">
                     <option value="">All Actions</option>
-                    <option value="created">Created</option>
-                    <option value="updated">Updated</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="processed">Processed</option>
-                    <option value="paid">Paid</option>
-                    <option value="deleted">Deleted</option>
-                    <option value="regenerated">Regenerated</option>
+                    @foreach(['created', 'updated', 'approved', 'rejected', 'processed', 'paid', 'deleted', 'regenerated'] as $act)
+                        <option value="{{ $act }}" {{ request('action') == $act ? 'selected' : '' }}>{{ ucfirst($act) }}</option>
+                    @endforeach
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-                <select name="date_range" id="dateRangeFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="all">All Time</option>
-                    <option value="today">Today</option>
-                    <option value="week">Last 7 Days</option>
-                    <option value="month">Last 30 Days</option>
-                    <option value="quarter">Last 90 Days</option>
+                <label for="date_range" class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                <select name="date_range" id="date_range" class="w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm sm:text-sm">
+                    <option value="all" {{ request('date_range') == 'all' ? 'selected' : '' }}>All Time</option>
+                    <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>Today</option>
+                    <option value="week" {{ request('date_range') == 'week' ? 'selected' : '' }}>Last 7 Days</option>
+                    <option value="month" {{ request('date_range') == 'month' ? 'selected' : '' }}>Last 30 Days</option>
+                    <option value="quarter" {{ request('date_range') == 'quarter' ? 'selected' : '' }}>Last 90 Days</option>
                 </select>
             </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 rounded-lg hover:from-blue-700 hover:to-blue-800 transition font-medium flex items-center justify-center gap-2">
-                    <i class="fas fa-search"></i> Search
+            <div class="flex space-x-2">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition duration-150 flex items-center justify-center">
+                    <i class="fas fa-filter mr-2"></i> Search
                 </button>
+                <a href="{{ route('admin.payroll.audit-history') }}" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md border border-gray-300 shadow-sm transition duration-150 flex items-center justify-center">
+                    <i class="fas fa-undo mr-2"></i> Reset
+                </a>
             </div>
         </form>
-    </div>
+    </x-admin.card>
 
     <!-- Audit Timeline -->
     <div class="space-y-4">
         @forelse($auditTrail ?? [] as $audit)
-            <div class="bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition p-6">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $audit->action === 'created' ? 'bg-green-100 text-green-800' : ($audit->action === 'deleted' ? 'bg-red-100 text-red-800' : ($audit->action === 'updated' ? 'bg-yellow-100 text-yellow-800' : ($audit->action === 'approved' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'))) }}">
-                                <i class="fas fa-{{ $audit->action === 'created' ? 'plus' : ($audit->action === 'deleted' ? 'trash' : ($audit->action === 'updated' ? 'edit' : ($audit->action === 'approved' ? 'check' : 'circle'))) }} mr-1"></i>
-                                {{ ucfirst($audit->action) }}
-                            </span>
-                            <span class="text-sm text-gray-600">
-                                <i class="fas fa-calendar mr-1"></i>
-                                {{ $audit->created_at->format('M d, Y \a\t H:i') }}
-                            </span>
+            <x-admin.card :padding="false" class="hover:shadow-lg transition duration-200">
+                <div class="p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                @php
+                                    $actionColors = [
+                                        'created' => 'bg-green-100 text-green-800',
+                                        'deleted' => 'bg-red-100 text-red-800',
+                                        'updated' => 'bg-yellow-100 text-yellow-800',
+                                        'approved' => 'bg-blue-100 text-blue-800',
+                                        'processed' => 'bg-purple-100 text-purple-800',
+                                        'paid' => 'bg-emerald-100 text-emerald-800',
+                                        'generated' => 'bg-indigo-100 text-indigo-800',
+                                        'regenerated' => 'bg-indigo-100 text-indigo-800',
+                                    ];
+                                    
+                                    $actionIcons = [
+                                        'created' => 'plus',
+                                        'deleted' => 'trash',
+                                        'updated' => 'edit',
+                                        'approved' => 'check',
+                                        'processed' => 'cogs',
+                                        'paid' => 'money-bill-wave',
+                                        'generated' => 'file-invoice',
+                                        'regenerated' => 'sync',
+                                    ];
+                                    
+                                    $colorClass = $actionColors[$audit->action] ?? 'bg-gray-100 text-gray-800';
+                                    $iconClass = $actionIcons[$audit->action] ?? 'circle';
+                                @endphp
+                                
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $colorClass }}">
+                                    <i class="fas fa-{{ $iconClass }} mr-1.5"></i>
+                                    {{ ucfirst($audit->action) }}
+                                </span>
+                                <span class="text-xs text-gray-500 flex items-center">
+                                    <i class="fas fa-calendar-alt mr-1.5 opacity-75"></i>
+                                    {{ $audit->created_at->format('M d, Y') }} at {{ $audit->created_at->format('h:i A') }}
+                                </span>
+                            </div>
+
+                            <h4 class="text-base font-semibold text-gray-900 mb-1 flex items-center">
+                                <span class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2 text-blue-600 text-xs shadow-sm">
+                                    <i class="fas fa-user-tag"></i>
+                                </span>
+                                {{ $audit->payroll?->employee?->full_name ?? 'Unknown Employee' }}
+                            </h4>
+
+                            <p class="text-sm text-gray-600 mb-3 ml-10">
+                                <i class="fas fa-user-circle mr-1 text-gray-400"></i>
+                                <span class="font-medium text-gray-700">Action by:</span> {{ $audit->user?->name ?? 'System' }}
+                            </p>
+
+                            @if($audit->reason)
+                                <div class="ml-10 bg-blue-50 border border-blue-100 rounded-lg p-3 mb-3 text-sm text-blue-800">
+                                    <strong class="font-semibold block mb-1"><i class="fas fa-comment-alt mr-1"></i> Reason:</strong> 
+                                    {{ $audit->reason }}
+                                </div>
+                            @endif
+
+                            @if($audit->changes && is_array($audit->changes) && count($audit->changes) > 0)
+                                <div class="ml-10 bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+                                    <div class="px-4 py-2 bg-gray-100 border-b border-gray-200 text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                        Changes applied
+                                    </div>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full text-sm">
+                                            <thead>
+                                                <tr class="bg-gray-50">
+                                                    <th scope="col" class="text-left px-4 py-2 font-medium text-gray-600 border-b border-gray-200 w-1/3">Field</th>
+                                                    <th scope="col" class="text-left px-4 py-2 font-medium text-gray-600 border-b border-gray-200 w-1/3">Old Value</th>
+                                                    <th scope="col" class="text-left px-4 py-2 font-medium text-gray-600 border-b border-gray-200 w-1/3">New Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-200 bg-white">
+                                                @foreach($audit->changes as $field => $change)
+                                                    <tr class="hover:bg-gray-50 transition-colors">
+                                                        <td class="px-4 py-2 font-medium text-gray-800 border-r border-gray-100">
+                                                            {{ ucwords(str_replace('_', ' ', $field)) }}
+                                                        </td>
+                                                        <td class="px-4 py-2 text-red-600 border-r border-gray-100 bg-red-50/30">
+                                                            <div class="flex items-center">
+                                                                <i class="fas fa-minus-circle mr-2 text-xs opacity-50"></i>
+                                                                @if(is_array($change))
+                                                                    {{ $change['old'] ?? 'N/A' }}
+                                                                @else
+                                                                    {{ $change }}
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-2 text-green-600 bg-green-50/30">
+                                                            <div class="flex items-center">
+                                                                <i class="fas fa-plus-circle mr-2 text-xs opacity-50"></i>
+                                                                @if(is_array($change))
+                                                                    {{ $change['new'] ?? 'N/A' }}
+                                                                @else
+                                                                    N/A
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
-                        <h4 class="text-lg font-semibold text-gray-900 mb-1">
-                            <i class="fas fa-user mr-2 text-blue-600"></i>
-                            {{ $audit->payroll?->employee?->full_name ?? 'Unknown Employee' }}
-                        </h4>
-
-                        <p class="text-sm text-gray-600 mb-3">
-                            <i class="fas fa-user-tie mr-1"></i>
-                            <strong>By:</strong> {{ $audit->user?->name ?? 'System' }}
-                        </p>
-
-                        @if($audit->reason)
-                            <div class="bg-blue-50 border border-blue-200 rounded p-3 mb-3">
-                                <p class="text-sm text-blue-800">
-                                    <i class="fas fa-comment mr-1"></i>
-                                    <strong>Reason:</strong> {{ $audit->reason }}
-                                </p>
-                            </div>
-                        @endif
-
-                        @if($audit->changes && is_array($audit->changes) && count($audit->changes) > 0)
-                            <div class="bg-gray-50 border border-gray-200 rounded p-3 overflow-x-auto">
-                                <p class="text-sm font-semibold text-gray-900 mb-2">Changes:</p>
-                                <table class="text-xs w-full">
-                                    <thead>
-                                        <tr class="border-b border-gray-300">
-                                            <th class="text-left px-2 py-1 font-semibold text-gray-700">Field</th>
-                                            <th class="text-left px-2 py-1 font-semibold text-gray-700">Old Value</th>
-                                            <th class="text-left px-2 py-1 font-semibold text-gray-700">New Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($audit->changes as $field => $change)
-                                            <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                                <td class="px-2 py-2 font-medium text-gray-800">{{ ucfirst(str_replace('_', ' ', $field)) }}</td>
-                                                <td class="px-2 py-2 text-red-600">
-                                                    @if(is_array($change))
-                                                        {{ $change['old'] ?? 'N/A' }}
-                                                    @else
-                                                        {{ $change }}
-                                                    @endif
-                                                </td>
-                                                <td class="px-2 py-2 text-green-600">
-                                                    @if(is_array($change))
-                                                        {{ $change['new'] ?? 'N/A' }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="text-right ml-4">
-                        <p class="text-xs text-gray-500">
-                            <i class="fas fa-shield-alt mr-1"></i>
-                            {{ $audit->ip_address ?? 'Unknown IP' }}
-                        </p>
+                        <div class="text-right ml-4 flex flex-col items-end">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200" title="IP Address">
+                                <i class="fas fa-laptop-code mr-1.5"></i>
+                                {{ $audit->ip_address ?? 'Unknown IP' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </x-admin.card>
         @empty
-            <div class="bg-white rounded-xl shadow-md border border-gray-100 p-12 text-center">
-                <i class="fas fa-history text-4xl text-gray-300 mb-4"></i>
-                <p class="text-gray-600 text-lg">No audit records found</p>
-                <p class="text-gray-500 text-sm mt-2">Changes and actions on payroll will appear here</p>
-            </div>
+            <x-admin.empty-state
+                icon="fas fa-history"
+                title="No audit records found"
+                message="Changes and actions on payroll records will appear here as they happen."
+            />
         @endforelse
     </div>
-
+    
     <!-- Pagination -->
     @if(($auditTrail ?? collect())->count() > 0)
-        <div class="mt-6 flex justify-center">
+        <div class="mt-6">
             {{ ($auditTrail ?? collect())->links() }}
         </div>
     @endif
 </div>
 
-@push('scripts')
-<script>
-    document.getElementById('filterForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const employeeId = document.getElementById('employeeFilter').value;
-        const action = document.getElementById('actionFilter').value;
-        const dateRange = document.getElementById('dateRangeFilter').value;
-
-        let url = '{{ route("payroll.audit-history") }}?';
-        if (employeeId) url += `employee_id=${employeeId}&`;
-        if (action) url += `action=${action}&`;
-        if (dateRange && dateRange !== 'all') url += `date_range=${dateRange}`;
-
-        window.location.href = url;
-    });
-</script>
-@endpush
-
+{{-- Standard scripts are handled by the layout --}}
 @endsection

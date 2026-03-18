@@ -12,7 +12,7 @@
         'secondary' => 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300',
         'success' => 'bg-green-600 hover:bg-green-700 text-white border-transparent',
         'danger' => 'bg-red-600 hover:bg-red-700 text-white border-transparent',
-        'warning' => 'bg-yellow-500 hover:bg-yellow-600 text-white border-transparent',
+        'warning' => 'bg-yellow-400 hover:bg-yellow-500 text-yellow-900 border-transparent',
         'info' => 'bg-blue-500 hover:bg-blue-600 text-white border-transparent',
     ];
 

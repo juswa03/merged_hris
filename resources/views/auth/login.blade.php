@@ -447,13 +447,32 @@
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+        
+        const loginEmail = document.getElementById('loginEmail').value.trim();
+        const loginPassword = document.getElementById('loginPassword').value;
+        
+        // Validation
+        if (!loginEmail || !loginPassword) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            alert('Please enter both email and password.');
+            return;
+        }
+        
         const formData = {
-            loginEmail: document.getElementById('loginEmail').value,
-            loginPassword: document.getElementById('loginPassword').value
+            loginEmail: loginEmail,
+            loginPassword: loginPassword
         };
+
+        console.log('Attempting login for:', loginEmail);
 
         fetch('{{ route("login.post") }}', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -462,18 +481,50 @@
             body: JSON.stringify(formData)
         })
         .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw err; });
+            console.log('Login response status:', response.status);
+            
+            if (response.status === 401) {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Invalid credentials');
+                });
             }
+            
+            if (response.status === 403) {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Access denied');
+                });
+            }
+            
+            if (response.status === 500) {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Server error');
+                });
+            }
+            
+            if (!response.ok) {
+                throw new Error('Network response status: ' + response.status);
+            }
+            
             return response.json();
         })
         .then(data => {
+            console.log('Login response:', data);
+            
             if (data.success && data.redirect) {
-                window.location.href = data.redirect;
+                console.log('Login successful, redirecting to:', data.redirect);
+                // Force a small delay to ensure session is persisted
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 100);
+            } else {
+                throw new Error(data.message || 'Login failed');
             }
         })
         .catch(error => {
-            alert(error.message || 'Login failed. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            console.error('Login error:', error);
+            alert('Login failed: ' + (error.message || 'Please check your credentials and try again.'));
         });
     });
 

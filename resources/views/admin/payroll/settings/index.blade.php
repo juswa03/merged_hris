@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payroll Settings')
 
@@ -41,7 +41,7 @@
 
     <!-- Tab 1: General Settings -->
     <div x-show="activeTab === 'general'" class="space-y-6">
-        <form action="{{ route('payroll.settings.update') }}" method="POST">
+        <form action="{{ route('admin.payroll.settings.update') }}" method="POST">
             @csrf
             
             <div class="grid grid-cols-1 gap-6">
@@ -149,7 +149,7 @@
                                 <i class="fas fa-edit"></i>
                             </button>
                             @if($type->deductions_count == 0)
-                            <form action="{{ route('deduction-types.destroy', $type) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this type?');">
+                            <form action="{{ route('admin.deduction-types.destroy', $type) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this type?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900">
@@ -182,14 +182,14 @@
                 <h2 class="text-xl font-bold text-gray-900">Deductions List</h2>
                 <p class="mt-1 text-sm text-gray-600">Manage specific deductions and their amounts</p>
             </div>
-            <a href="{{ route('deductions.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">
+            <a href="{{ route('admin.deductions.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">
                 <i class="fas fa-plus mr-2"></i>Add Deduction
             </a>
         </div>
 
         <!-- Filters -->
         <div class="bg-white rounded-lg shadow p-4">
-            <form method="GET" action="{{ route('payroll.settings.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <form method="GET" action="{{ route('admin.payroll.settings.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Preserve active tab -->
                 <input type="hidden" name="tab" value="deductions">
                 
@@ -217,7 +217,7 @@
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-filter mr-2"></i>Filter
                     </button>
-                    <a href="{{ route('payroll.settings.index', ['tab' => 'deductions']) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                    <a href="{{ route('admin.payroll.settings.index', ['tab' => 'deductions']) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-redo mr-2"></i>Reset
                     </a>
                 </div>
@@ -250,10 +250,10 @@
                             ₱{{ number_format($deduction->amount, 2) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('deductions.edit', $deduction->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <a href="{{ route('admin.deductions.edit', $deduction->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="{{ route('deductions.show', $deduction->id) }}" class="text-green-600 hover:text-green-900 mr-3" title="View Assignments">
+                            <a href="{{ route('admin.deductions.show', $deduction->id) }}" class="text-green-600 hover:text-green-900 mr-3" title="View Assignments">
                                 <i class="fas fa-users"></i>
                             </a>
                         </td>
@@ -320,7 +320,7 @@
 <script>
     function openCreateModal() {
         document.getElementById('modalTitle').innerText = 'Add Deduction Type';
-        document.getElementById('typeForm').action = "{{ route('deduction-types.store') }}";
+        document.getElementById('typeForm').action = "{{ route('admin.deduction-types.store') }}";
         document.getElementById('methodField').innerHTML = '';
         document.getElementById('name').value = '';
         document.getElementById('description').value = '';

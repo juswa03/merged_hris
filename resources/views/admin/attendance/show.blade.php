@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Employee Attendance Details')
 
@@ -102,7 +102,7 @@
 
     <!-- Date Range Filter -->
     <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-6">
-        <form method="GET" action="{{ route('attendance.show', $employee->id) }}" class="space-y-4">
+        <form method="GET" action="{{ route('admin.attendance.show', $employee->id) }}" class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <i class="fas fa-filter mr-2 text-blue-600"></i>
                 Filter Period
@@ -125,7 +125,7 @@
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition flex items-center gap-2 flex-1">
                         <i class="fas fa-search"></i> Apply
                     </button>
-                    <a href="{{ route('attendance.show', $employee->id) }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg transition flex items-center gap-2">
+                    <a href="{{ route('admin.attendance.show', $employee->id) }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg transition flex items-center gap-2">
                         <i class="fas fa-redo"></i>
                     </a>
                 </div>

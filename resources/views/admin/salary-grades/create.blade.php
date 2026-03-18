@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Create Salary Schedule')
 
 @section('content')
-<div class="w-full px-6 py-6 max-w-7xl mx-auto">
+<div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
     <x-admin.page-header
         title="Create New Salary Schedule"
@@ -13,14 +13,14 @@
             <x-admin.action-button
                 variant="secondary"
                 icon="fas fa-arrow-left"
-                onclick="window.location.href='{{ route('salary-grades.index') }}'"
+                href="{{ route('admin.salary-grades.index') }}"
             >
                 Back to Salary Grades
             </x-admin.action-button>
         </x-slot>
     </x-admin.page-header>
 
-    <form method="POST" action="{{ route('salary-grades.store') }}" id="salaryScheduleForm">
+    <form method="POST" action="{{ route('admin.salary-grades.store') }}" id="salaryScheduleForm">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -216,7 +216,7 @@
                             <i class="fas fa-save mr-2"></i> Create Salary Schedule
                         </button>
 
-                        <button type="button" onclick="window.location.href='{{ route('salary-grades.index') }}'"
+                        <button type="button" onclick="window.location.href='{{ route('admin.salary-grades.index') }}'"
                                 class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition-all duration-200 font-semibold">
                             <i class="fas fa-times mr-2"></i> Cancel
                         </button>

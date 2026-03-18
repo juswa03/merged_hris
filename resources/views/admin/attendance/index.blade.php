@@ -1,104 +1,69 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Attendance Management')
 
 @section('content')
-<div class="w-full px-6 py-6 max-w-7xl mx-auto">
+<div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
     <x-admin.page-header
         title="Attendance Management"
         description="View and manage employee attendance records"
     >
         <x-slot name="actions">
-            <a href="{{ route('attendance.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
-                <i class="fas fa-plus"></i> Manual Entry
-            </a>
-            <button onclick="exportAttendance()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
-                <i class="fas fa-download"></i> Export
-            </button>
+            <x-admin.action-button href="{{ route('admin.attendance.create') }}" variant="primary" icon="fas fa-plus">Manual Entry</x-admin.action-button>
+            <x-admin.action-button variant="success" icon="fas fa-download" onclick="exportAttendance()">Export</x-admin.action-button>
         </x-slot>
     </x-admin.page-header>
 
     <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-8 mb-6">
-        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Records</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ $stats['total_records'] }}</p>
-                </div>
-                <div class="p-3 bg-blue-100 rounded-full">
-                    <i class="fas fa-list text-blue-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Check-Ins</p>
-                    <p class="text-3xl font-bold text-green-600">{{ $stats['total_checkins'] }}</p>
-                </div>
-                <div class="p-3 bg-green-100 rounded-full">
-                    <i class="fas fa-sign-in-alt text-green-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Check-Outs</p>
-                    <p class="text-3xl font-bold text-orange-600">{{ $stats['total_checkouts'] }}</p>
-                </div>
-                <div class="p-3 bg-orange-100 rounded-full">
-                    <i class="fas fa-sign-out-alt text-orange-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Biometric</p>
-                    <p class="text-3xl font-bold text-purple-600">{{ $stats['biometric_count'] }}</p>
-                </div>
-                <div class="p-3 bg-purple-100 rounded-full">
-                    <i class="fas fa-fingerprint text-purple-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Unique Employees</p>
-                    <p class="text-3xl font-bold text-indigo-600">{{ $stats['unique_employees'] }}</p>
-                </div>
-                <div class="p-3 bg-indigo-100 rounded-full">
-                    <i class="fas fa-users text-indigo-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
+        <x-admin.gradient-stat-card
+            title="Total Records"
+            :value="$stats['total_records']"
+            icon="fas fa-list-alt"
+            gradientFrom="blue-500"
+            gradientTo="blue-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Check-Ins"
+            :value="$stats['total_checkins']"
+            icon="fas fa-sign-in-alt"
+            gradientFrom="green-500"
+            gradientTo="green-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Check-Outs"
+            :value="$stats['total_checkouts']"
+            icon="fas fa-sign-out-alt"
+            gradientFrom="orange-500"
+            gradientTo="orange-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Biometric"
+            :value="$stats['biometric_count']"
+            icon="fas fa-fingerprint"
+            gradientFrom="purple-500"
+            gradientTo="purple-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Unique Employees"
+            :value="$stats['unique_employees']"
+            icon="fas fa-users"
+            gradientFrom="indigo-500"
+            gradientTo="indigo-600"
+        />
     </div>
 
-    <!-- Success Message -->
     @if(session('success'))
-    <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-lg">
-        <div class="flex items-center">
-            <i class="fas fa-check-circle text-green-400 mr-3"></i>
-            <p class="text-sm text-green-700">{{ session('success') }}</p>
-        </div>
-    </div>
+    <x-admin.alert type="success" dismissible class="mb-6">{{ session('success') }}</x-admin.alert>
+    @endif
+    @if(session('error'))
+    <x-admin.alert type="error" dismissible class="mb-6">{{ session('error') }}</x-admin.alert>
     @endif
 
     <!-- Filters -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <i class="fas fa-filter mr-2 text-blue-600"></i>
-            Filters
-        </h3>
-        <form method="GET" action="{{ route('attendance.index') }}" class="space-y-4">
+    <x-admin.card title="Filters" class="mb-6">
+        <form method="GET" action="{{ route('admin.attendance.index') }}" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- Date Range -->
                 <div>
@@ -119,7 +84,7 @@
                     <select name="employee_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Employees</option>
                         @foreach($employees as $employee)
-                            <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                            <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
                                 {{ $employee->first_name }} {{ $employee->last_name }}
                             </option>
                         @endforeach
@@ -132,7 +97,7 @@
                     <select name="department_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Departments</option>
                         @foreach($departments as $dept)
-                            <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
+                            <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
                                 {{ $dept->name }}
                             </option>
                         @endforeach
@@ -145,7 +110,7 @@
                     <select name="attendance_type_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Types</option>
                         @foreach($attendanceTypes as $type)
-                            <option value="{{ $type->id }}" {{ old('attendance_type_id') == $type->id ? 'selected' : '' }}>
+                            <option value="{{ $type->id }}" {{ request('attendance_type_id') == $type->id ? 'selected' : '' }}>
                                 {{ $type->name }}
                             </option>
                         @endforeach
@@ -153,21 +118,16 @@
                 </div>
             </div>
 
-            <div class="flex gap-2">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition flex items-center gap-2">
-                    <i class="fas fa-search"></i> Apply Filters
-                </button>
-                <a href="{{ route('attendance.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg transition flex items-center gap-2">
-                    <i class="fas fa-redo"></i> Reset
-                </a>
+            <div class="flex items-center gap-2">
+                <x-admin.action-button type="submit" variant="primary" icon="fas fa-search">Apply Filters</x-admin.action-button>
+                <x-admin.action-button href="{{ route('admin.attendance.index') }}" variant="secondary" icon="fas fa-redo">Reset</x-admin.action-button>
             </div>
         </form>
-    </div>
+    </x-admin.card>
 
     <!-- Attendance Table -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
+    <x-admin.card :padding="false">
+        <x-admin.table-wrapper>
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Employee</th>
@@ -183,7 +143,7 @@
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
-                                <a href="{{ route('attendance.show', $attendance->employee_id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                <a href="{{ route('admin.attendance.show', $attendance->employee_id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $attendance->employee->first_name }} {{ $attendance->employee->last_name }}
                                 </a>
                             </div>
@@ -198,40 +158,54 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                {{ $attendance->attendanceType->name == 'Check-in' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800' }}">
-                                {{ $attendance->attendanceType->name ?? 'N/A' }}
-                            </span>
+                            @php
+                                $typeName = $attendance->attendanceType->name ?? 'N/A';
+                                $typeVariant = match(true) {
+                                    str_contains(strtolower($typeName), 'in')  => 'success',
+                                    str_contains(strtolower($typeName), 'out') => 'warning',
+                                    default => 'default'
+                                };
+                            @endphp
+                            <x-admin.badge :variant="$typeVariant">{{ $typeName }}</x-admin.badge>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                {{ $attendance->attendanceSource->name == 'Biometric' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800' }}">
-                                {{ $attendance->attendanceSource->name ?? 'N/A' }}
-                            </span>
+                            @php
+                                $sourceName = $attendance->attendanceSource->name ?? 'N/A';
+                                $sourceVariant = strtolower($sourceName) === 'biometric' ? 'info' : 'default';
+                            @endphp
+                            <x-admin.badge :variant="$sourceVariant">{{ $sourceName }}</x-admin.badge>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <button onclick="deleteAttendance({{ $attendance->id }})" class="text-red-600 hover:text-red-800 transition" title="Delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <x-admin.action-button
+                                variant="danger"
+                                icon="fas fa-trash-alt"
+                                :iconOnly="true"
+                                size="sm"
+                                title="Delete"
+                                onclick="deleteAttendance({{ $attendance->id }})"
+                            />
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
-                            <i class="fas fa-inbox text-gray-400 text-4xl mb-3"></i>
-                            <p class="text-gray-500">No attendance records found</p>
+                        <td colspan="6">
+                            <x-admin.empty-state
+                                icon="fas fa-calendar-times"
+                                title="No attendance records found"
+                                message="Try adjusting your filters or date range"
+                            />
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
-            </table>
-        </div>
+        </x-admin.table-wrapper>
 
-        <!-- Pagination -->
-        <div class="px-6 py-4 border-t border-gray-200">
+        @if($attendances->hasPages())
+        <x-slot name="footer">
             {{ $attendances->links() }}
-        </div>
-    </div>
+        </x-slot>
+        @endif
+    </x-admin.card>
 </div>
 
 @push('scripts')

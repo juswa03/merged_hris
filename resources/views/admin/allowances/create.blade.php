@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 @section('title', 'Add Allowance')
 @section('content')
 <div class="container mx-auto px-4 py-6 max-w-2xl">
@@ -7,7 +7,7 @@
         <p class="mt-2 text-sm text-gray-600">Create a new allowance type</p>
     </div>
     <div class="bg-white rounded-lg shadow p-6">
-        <form action="{{ route('allowances.store') }}" method="POST">
+        <form action="{{ route('admin.allowances.store') }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Allowance Name *</label>

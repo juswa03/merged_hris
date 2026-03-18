@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Bulk Salary Adjustment')
 
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Bulk Adjustment Form -->
-    <form method="POST" action="{{ route('salaries.bulk-adjust') }}" id="bulkAdjustForm" onsubmit="return confirmBulkAdjustment()">
+    <form method="POST" action="{{ route('admin.salaries.bulk-adjust') }}" id="bulkAdjustForm" onsubmit="return confirmBulkAdjustment()">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -232,7 +232,7 @@
                             <i class="fas fa-check mr-2"></i> Apply Bulk Adjustment
                         </button>
 
-                        <button type="button" onclick="window.location.href='{{ route('salaries.index') }}'"
+                        <button type="button" onclick="window.location.href='{{ route('admin.salaries.index') }}'"
                                 class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition-all duration-200 font-semibold">
                             <i class="fas fa-times mr-2"></i> Cancel
                         </button>

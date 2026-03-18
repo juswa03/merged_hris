@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Evaluate Performance')
 
@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3">
-            <a href="{{ route('performance.reviews.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.performance.reviews.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -60,7 +60,7 @@
     @endif
 
     <!-- Evaluation Form -->
-    <form action="{{ route('performance.reviews.storeEvaluation', $review->id) }}" method="POST">
+    <form action="{{ route('admin.performance.reviews.storeEvaluation', $review->id) }}" method="POST">
         @csrf
 
         <!-- Performance Criteria Ratings -->
@@ -207,7 +207,7 @@
 
         <!-- Form Actions -->
         <div class="flex items-center justify-between bg-white rounded-lg shadow-md p-6">
-            <a href="{{ route('performance.reviews.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
+            <a href="{{ route('admin.performance.reviews.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
                 <i class="fas fa-times mr-2"></i> Cancel
             </a>
             <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">

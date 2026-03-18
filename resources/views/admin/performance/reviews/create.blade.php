@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Create Performance Review')
 
@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3">
-            <a href="{{ route('performance.reviews.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.performance.reviews.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -38,7 +38,7 @@
 
     <!-- Create Review Form -->
     <div class="bg-white rounded-lg shadow-md p-6">
-        <form action="{{ route('performance.reviews.store') }}" method="POST">
+        <form action="{{ route('admin.performance.reviews.store') }}" method="POST">
             @csrf
 
             <div class="space-y-6">
@@ -122,7 +122,7 @@
 
                 <!-- Form Actions -->
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-                    <a href="{{ route('performance.reviews.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
+                    <a href="{{ route('admin.performance.reviews.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
                         <i class="fas fa-times mr-2"></i> Cancel
                     </a>
                     <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
@@ -163,7 +163,7 @@
         <div class="text-center py-8">
             <i class="fas fa-exclamation-triangle text-yellow-500 text-4xl mb-3"></i>
             <p class="text-gray-600">No active performance criteria found. Please add criteria before creating reviews.</p>
-            <a href="{{ route('performance.criteria.create') }}" class="mt-3 inline-block text-blue-600 hover:text-blue-800">
+            <a href="{{ route('admin.performance.criteria.create') }}" class="mt-3 inline-block text-blue-600 hover:text-blue-800">
                 <i class="fas fa-plus mr-1"></i> Add Performance Criteria
             </a>
         </div>

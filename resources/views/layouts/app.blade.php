@@ -308,16 +308,16 @@
                         <i class="fas fa-chevron-right ml-auto nav-arrow text-xs"></i>
                     </a>
                     <div class="submenu bg-blue-900 rounded-lg mt-1">
-                        <a href="{{ route('dtr.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.dtr.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">DTR</span>
                         </a>
-                        <a href="{{ route('attendance.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.attendance.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Attendance Log</span>
                         </a>
-                        <a href="{{ route('attendance.create') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.attendance.create') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Manual Entry</span>
                         </a>
-                        <a href="{{ route('attendance.reports') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.attendance.reports') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Attendance Reports</span>
                         </a>
                     </div>
@@ -331,32 +331,32 @@
                         <i class="fas fa-chevron-right ml-auto nav-arrow text-xs"></i>
                     </a>
                     <div class="submenu bg-blue-900 rounded-lg mt-1">
-                        <a href="{{ route('payroll.periods.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.periods.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Payroll Periods</span>
                         </a>
-                        <a href="{{ route('payroll.generation.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.generation.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Generate Payroll</span>
                         </a>
-                        <a href="{{ route('payroll.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Payroll List</span>
                         </a>
-                        <a href="{{ route('payroll.payslips') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.payslips') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Payslips</span>
                         </a>
-                        <a href="{{ route('payroll.reports.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.reports.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Payroll Reports</span>
                         </a>
-                        <a href="{{ route('payroll.tax-reports.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.tax-reports.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Tax Reports</span>
                         </a>
-                        {{-- <a href="{{ route('payroll.analytics.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        {{-- <a href="{{ route('admin.payroll.analytics.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Analytics</span>
                         </a> --}}
                         <div class="border-t border-blue-800 my-1"></div>
-                        <a href="{{ route('payroll.settings.index', ['tab' => 'deductions']) }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.payroll.settings.index', ['tab' => 'deductions']) }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Deductions</span>
                         </a>
-                        <a href="{{ route('allowances.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.allowances.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Allowances</span>
                         </a>
                     </div>
@@ -370,16 +370,16 @@
                         <i class="fas fa-chevron-right ml-auto nav-arrow text-xs"></i>
                     </a>
                     <div class="submenu bg-blue-900 rounded-lg mt-1">
-                        <a href="{{ route('salaries.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.salaries.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Overview</span>
                         </a>
-                        <a href="{{ route('salary-grades.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.salary-grades.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Salary Grades</span>
                         </a>
-                        {{-- <a href="{{ route('salaries.reports') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        {{-- <a href="{{ route('admin.salaries.reports') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Reports</span>
                         </a> --}}
-                        <a href="{{ route('salaries.bulk-adjust-form') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.salaries.bulk-adjust-form') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Bulk Adjustment</span>
                         </a>
                     </div>
@@ -396,10 +396,10 @@
                         {{-- <a href="" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Device Management</span>
                         </a> --}}
-                        <a href="{{ route('biometric.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.biometric.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Enroll Biometric</span>
                         </a>
-                        <a href="{{ route('biometric.enrolled') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.biometric.enrolled') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Enrolled Employees</span>
                         </a>
                         {{-- <a href="" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
@@ -439,7 +439,7 @@
                         <i class="fas fa-chevron-right ml-auto nav-arrow text-xs"></i>
                     </a>
                     <div class="submenu bg-blue-900 rounded-lg mt-1">
-                        <a href="{{ route('departments.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.departments.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Departments</span>
                         </a>
                         {{-- <a href="{{ route('positions.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
@@ -479,10 +479,10 @@
                         <i class="fas fa-chevron-right ml-auto nav-arrow text-xs"></i>
                     </a>
                     <div class="submenu bg-blue-900 rounded-lg mt-1">
-                        <a href="{{ route('users.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.users.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">User Management</span>
                         </a>
-                        <a href="{{ route('roles.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
+                        <a href="{{ route('admin.roles.index') }}" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">
                             <span class="nav-text">Role Management</span>
                         </a>
                         {{-- <a href="" class="submenu-item block px-4 py-2 hover:bg-blue-700 rounded transition-colors">

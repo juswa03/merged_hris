@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Deductions & Allowances Report')
 
@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-6">
     <div class="mb-6">
         <div class="flex items-center gap-3 mb-4">
-            <a href="{{ route('payroll.reports.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.payroll.reports.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <form action="{{ route('payroll.reports.deductions-allowances') }}" method="GET">
+        <form action="{{ route('admin.payroll.reports.deductions-allowances') }}" method="GET">
             <select name="period_id" onchange="this.form.submit()"
                     class="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                 <option value="">-- Select Payroll Period --</option>

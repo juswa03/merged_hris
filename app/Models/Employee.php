@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, Auditable;
+
+    public function getAuditLabel(): string
+    {
+        return trim("{$this->first_name} {$this->last_name}");
+    }
 
     protected $table = 'tbl_employee';
 
@@ -34,6 +40,7 @@ class Employee extends Model
         'basic_salary',
         'salary_grade',
         'salary_step',
+        'work_schedule_id',
     ];
 
     protected $casts = [
@@ -80,6 +87,11 @@ public function user()
     public function jobStatus()
     {
         return $this->belongsTo(JobStatus::class);
+    }
+
+    public function workSchedule()
+    {
+        return $this->belongsTo(WorkSchedule::class);
     }
 
 

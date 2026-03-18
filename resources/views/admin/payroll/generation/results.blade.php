@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payroll Generation Results')
 
@@ -99,10 +99,10 @@
     @endif
 
     <div class="mt-6 flex gap-3">
-        <a href="{{ route('payroll.generation.index') }}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+        <a href="{{ route('admin.payroll.generation.index') }}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
             <i class="fas fa-arrow-left mr-2"></i> Back to Generation
         </a>
-        <a href="{{ route('payroll.index') }}" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition">
+        <a href="{{ route('admin.payroll.index') }}" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition">
             <i class="fas fa-list mr-2"></i> View All Payrolls
         </a>
     </div>

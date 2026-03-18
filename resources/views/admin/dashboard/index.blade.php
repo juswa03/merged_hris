@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Admin Dashboard')
 
@@ -28,89 +28,40 @@
     </div>
     @endif
 
-    <!-- Main Statistics Cards with Gradients -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <!-- Total Employees -->
-        <div class="group bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Total Employees</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $totalEmployees }}</p>
-                        @if($newEmployeesThisMonth > 0)
-                            <p class="text-white/90 text-xs mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i> {{ $newEmployeesThisMonth }} new this month
-                            </p>
-                        @else
-                            <p class="text-white/90 text-xs mt-1">No new hires this month</p>
-                        @endif
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-users text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Employees -->
-        <div class="group bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Active Employees</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $activeEmployees }}</p>
-                        <p class="text-white/90 text-xs mt-1">
-                            {{ $totalEmployees > 0 ? round(($activeEmployees / $totalEmployees) * 100, 1) : 0 }}% of total
-                        </p>
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-user-check text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Today's Attendance -->
-        <div class="group bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Present Today</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $todayAttendance }}</p>
-                        <p class="text-white/90 text-xs mt-1">
-                            {{ $attendanceRate }}% attendance rate
-                        </p>
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-calendar-check text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Departments -->
-        <div class="group bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Departments</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $departmentCount }}</p>
-                        @if($lateToday > 0)
-                            <p class="text-white/90 text-xs mt-1">
-                                <i class="fas fa-clock mr-1"></i> {{ $lateToday }} late arrival(s) today
-                            </p>
-                        @else
-                            <p class="text-white/90 text-xs mt-1">
-                                <i class="fas fa-check mr-1"></i> No late arrivals today
-                            </p>
-                        @endif
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-building text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Main Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <x-admin.gradient-stat-card
+            title="Total Employees"
+            :value="$totalEmployees"
+            icon="fas fa-users"
+            gradientFrom="blue-500"
+            gradientTo="blue-600"
+            :description="$newEmployeesThisMonth > 0 ? '↑ ' . $newEmployeesThisMonth . ' new this month' : 'No new hires this month'"
+        />
+        <x-admin.gradient-stat-card
+            title="Active Employees"
+            :value="$activeEmployees"
+            icon="fas fa-user-check"
+            gradientFrom="green-500"
+            gradientTo="green-600"
+            :description="($totalEmployees > 0 ? round(($activeEmployees / $totalEmployees) * 100, 1) : 0) . '% of total'"
+        />
+        <x-admin.gradient-stat-card
+            title="Present Today"
+            :value="$todayAttendance"
+            icon="fas fa-calendar-check"
+            gradientFrom="purple-500"
+            gradientTo="purple-600"
+            :description="$attendanceRate . '% attendance rate'"
+        />
+        <x-admin.gradient-stat-card
+            title="Departments"
+            :value="$departmentCount"
+            icon="fas fa-building"
+            gradientFrom="orange-500"
+            gradientTo="orange-600"
+            :description="$lateToday > 0 ? $lateToday . ' late arrival(s) today' : 'No late arrivals today'"
+        />
     </div>
 
     <!-- Payroll Summary Card -->
@@ -203,31 +154,31 @@
         <!-- Quick Actions -->
         <x-admin.card title="Quick Actions">
             <div class="space-y-3">
-                <a href="{{ route('employees.index') }}" class="block w-full text-left px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                <a href="{{ route('admin.employees.index') }}" class="block w-full text-left px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
                     <div class="flex items-center">
                         <i class="fas fa-users text-blue-600 mr-3"></i>
                         <span class="text-sm font-medium text-blue-900">Manage Employees</span>
                     </div>
                 </a>
-                <a href="{{ route('attendance.index') }}" class="block w-full text-left px-4 py-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                <a href="{{ route('admin.attendance.index') }}" class="block w-full text-left px-4 py-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
                     <div class="flex items-center">
                         <i class="fas fa-calendar-check text-green-600 mr-3"></i>
                         <span class="text-sm font-medium text-green-900">View Attendance</span>
                     </div>
                 </a>
-                <a href="{{ route('departments.index') }}" class="block w-full text-left px-4 py-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
+                <a href="{{ route('admin.departments.index') }}" class="block w-full text-left px-4 py-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
                     <div class="flex items-center">
                         <i class="fas fa-building text-yellow-600 mr-3"></i>
                         <span class="text-sm font-medium text-yellow-900">Manage Departments</span>
                     </div>
                 </a>
-                <a href="{{ route('payroll.index') }}" class="block w-full text-left px-4 py-3 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+                <a href="{{ route('admin.payroll.index') }}" class="block w-full text-left px-4 py-3 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
                     <div class="flex items-center">
                         <i class="fas fa-money-bill-wave text-purple-600 mr-3"></i>
                         <span class="text-sm font-medium text-purple-900">Process Payroll</span>
                     </div>
                 </a>
-                <a href="{{ route('dtr.index') }}" class="block w-full text-left px-4 py-3 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors">
+                <a href="{{ route('admin.dtr.index') }}" class="block w-full text-left px-4 py-3 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors">
                     <div class="flex items-center">
                         <i class="fas fa-clock text-pink-600 mr-3"></i>
                         <span class="text-sm font-medium text-pink-900">DTR Management</span>
@@ -241,7 +192,7 @@
     <x-admin.card title="Recently Added Employees" :padding="false">
         <x-slot name="footer">
             <div class="text-center">
-                <a href="{{ route('employees.index') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                <a href="{{ route('admin.employees.index') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
                     View All Employees <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>

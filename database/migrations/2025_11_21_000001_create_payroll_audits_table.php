@@ -15,7 +15,7 @@ return new class extends Migration
             Schema::create('tbl_payroll_audits', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('payroll_id')->constrained('tbl_payrolls')->onDelete('cascade');
-                $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+                $table->foreignId('user_id')->nullable()->constrained('tbl_users')->onDelete('set null');
                 $table->enum('action', ['created', 'updated', 'approved', 'rejected', 'processed', 'paid', 'deleted', 'regenerated']);
                 $table->json('changes')->nullable()->comment('Before/after values of changed fields');
                 $table->text('reason')->nullable()->comment('Reason for the action');

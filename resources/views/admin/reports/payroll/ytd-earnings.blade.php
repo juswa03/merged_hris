@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Year-to-Date Earnings Report')
 
@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-6">
     <div class="mb-6">
         <div class="flex items-center gap-3 mb-4">
-            <a href="{{ route('payroll.reports.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.payroll.reports.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -16,7 +16,7 @@
         </div>
 
         <div class="flex justify-between items-center">
-            <form action="{{ route('payroll.reports.ytd-earnings') }}" method="GET">
+            <form action="{{ route('admin.payroll.reports.ytd-earnings') }}" method="GET">
                 <select name="year" onchange="this.form.submit()"
                         class="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     @foreach($availableYears as $y)
@@ -25,7 +25,7 @@
                 </select>
             </form>
 
-            <a href="{{ route('payroll.reports.export-ytd-earnings-csv', ['year' => $year]) }}"
+            <a href="{{ route('admin.payroll.reports.export-ytd-earnings-csv', ['year' => $year]) }}"
                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">
                 <i class="fas fa-download mr-2"></i> Export to CSV
             </a>

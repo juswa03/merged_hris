@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Employee DTR Details')
 
@@ -12,7 +12,7 @@
                 <h1 class="text-3xl font-bold text-gray-900">Employee DTR - {{ $monthYear }}</h1>
                 <p class="mt-2 text-sm text-gray-600">Daily Time Record for {{ $employee->full_name }}</p>
             </div>
-            <a href="{{ route('dtr.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+            <a href="{{ route('admin.dtr.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>Back to List
             </a>
         </div>
@@ -40,12 +40,12 @@
 
         <!-- Month Navigation -->
         <div class="flex items-center justify-between pt-4 border-t">
-            <a href="{{ route('dtr.show', ['employee' => $employee->id, 'month' => $selectedDate->copy()->subMonth()->format('Y-m')]) }}"
+            <a href="{{ route('admin.dtr.show', ['employee' => $employee->id, 'month' => $selectedDate->copy()->subMonth()->format('Y-m')]) }}"
                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm transition-colors">
                 <i class="fas fa-chevron-left mr-2"></i>Previous Month
             </a>
             <span class="text-lg font-semibold text-gray-900">{{ $monthYear }}</span>
-            <a href="{{ route('dtr.show', ['employee' => $employee->id, 'month' => $selectedDate->copy()->addMonth()->format('Y-m')]) }}"
+            <a href="{{ route('admin.dtr.show', ['employee' => $employee->id, 'month' => $selectedDate->copy()->addMonth()->format('Y-m')]) }}"
                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm transition-colors">
                 Next Month<i class="fas fa-chevron-right ml-2"></i>
             </a>
@@ -109,7 +109,7 @@
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-900">Daily Time Record</h3>
-            <a href="{{ route('dtr.export-cs-form-48', ['employee' => $employee->id, 'month' => $selectedDate->month, 'year' => $selectedDate->year]) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('admin.dtr.export-cs-form-48', ['employee' => $employee->id, 'month' => $selectedDate->month, 'year' => $selectedDate->year]) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                 <i class="fas fa-file-export mr-2"></i>Export DTR
             </a>
         </div>
@@ -189,7 +189,7 @@
                             @endif
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-center text-sm no-print">
-                            <a href="{{ route('dtr.edit', $entry->id) }}"
+                            <a href="{{ route('admin.dtr.edit', $entry->id) }}"
                                class="text-blue-600 hover:text-blue-800 font-medium">
                                 <i class="fas fa-edit"></i> Edit
                             </a>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 @section('title', 'Edit Allowance')
 @section('content')
 <div class="container mx-auto px-4 py-6 max-w-2xl">
@@ -6,7 +6,7 @@
         <h1 class="text-3xl font-bold text-gray-900">Edit Allowance</h1>
     </div>
     <div class="bg-white rounded-lg shadow p-6">
-        <form action="{{ route('allowances.update', $allowance->id) }}" method="POST">
+        <form action="{{ route('admin.allowances.update', $allowance->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-4">
@@ -30,7 +30,7 @@
                        class="w-full border border-gray-300 rounded-lg px-3 py-2">
             </div>
             <div class="flex items-center justify-end gap-3">
-                <a href="{{ route('allowances.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium">Cancel</a>
+                <a href="{{ route('admin.allowances.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium">Cancel</a>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
                     <i class="fas fa-save mr-2"></i>Update
                 </button>

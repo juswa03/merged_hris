@@ -38,15 +38,20 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // Define authorization gates
         Gate::define('access_admin', function ($user) {
-            // Allow Super Admins always
-            if ($user->role_name === 'Super Admin') {
-                return true;
-            }
+            // Only actual admins may access /admin/* routes.
+            // HR Staff have their own /hr/* namespace.
+            return $user->isAdmin();
+        });
 
+        Gate::define('access_hr', function ($user) {
+            // Admins can also enter the HR portal (e.g. to assist HR staff).
+            return $user->isAdmin() || $user->isHR();
+        });
 
-            // // Otherwise, apply normal access rules
-            // return $user->hasPermission('access_admin');
+        Gate::define('access_dashboard', function ($user) {
+            return $user->isAdmin() || $user->isHR() || $user->isEmployee();
         });
     }
 }

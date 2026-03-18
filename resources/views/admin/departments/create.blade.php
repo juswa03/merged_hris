@@ -1,117 +1,111 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Create Department')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
-    <div class="mb-6">
-        <div class="flex items-center gap-3 mb-2">
-            <a href="{{ route('departments.index') }}" class="text-gray-600 hover:text-gray-900">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            <h1 class="text-3xl font-bold text-gray-900">Create New Department</h1>
-        </div>
-        <p class="text-sm text-gray-600 ml-8">Add a new department to your organization</p>
-    </div>
+    <x-admin.page-header
+        title="Create New Department"
+        description="Add a new department to your organization"
+    >
+        <x-slot name="actions">
+            <x-admin.action-button :href="route('admin.departments.index')" variant="secondary" icon="fas fa-arrow-left">
+                Back to Departments
+            </x-admin.action-button>
+        </x-slot>
+    </x-admin.page-header>
 
-    <!-- Form Card -->
-    <div class="max-w-2xl bg-white rounded-lg shadow-md p-6">
-        <form action="{{ route('departments.store') }}" method="POST">
-            @csrf
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Form Section -->
+        <div class="lg:col-span-2">
+            <x-admin.card>
+                <form action="{{ route('admin.departments.store') }}" method="POST">
+                    @csrf
 
-            <!-- Department Name -->
-            <div class="mb-6">
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                    Department Name <span class="text-red-500">*</span>
-                </label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value="{{ old('name') }}"
-                    class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror"
-                    placeholder="e.g., Human Resources"
-                    required
-                >
-                @error('name')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-                <p class="mt-2 text-sm text-gray-500">
-                    <i class="fas fa-info-circle"></i> Enter a unique department name
-                </p>
-            </div>
-
-            <!-- Description -->
-            <div class="mb-6">
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                    Description
-                </label>
-                <textarea
-                    id="description"
-                    name="description"
-                    rows="4"
-                    class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('description') border-red-500 @enderror"
-                    placeholder="Brief description of the department's role and responsibilities..."
-                >{{ old('description') }}</textarea>
-                @error('description')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-                <p class="mt-2 text-sm text-gray-500">
-                    <i class="fas fa-info-circle"></i> Optional: Add details about this department
-                </p>
-            </div>
-
-            <!-- Error Message -->
-            @if($errors->any())
-            <div class="mb-6 bg-red-50 border-l-4 border-red-400 p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-exclamation-circle text-red-400"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">
-                            Please correct the errors above and try again.
+                    <!-- Department Name -->
+                    <div class="mb-6">
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                            Department Name <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value="{{ old('name') }}"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
+                            placeholder="e.g., Human Resources"
+                            required
+                        >
+                        @error('name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i> Enter a unique department name.
                         </p>
                     </div>
-                </div>
-            </div>
-            @endif
 
-            <!-- Action Buttons -->
-            <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
-                <a
-                    href="{{ route('departments.index') }}"
-                    class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    <i class="fas fa-times mr-2"></i> Cancel
-                </a>
-                <button
-                    type="submit"
-                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    <i class="fas fa-save mr-2"></i> Create Department
-                </button>
-            </div>
-        </form>
-    </div>
+                    <!-- Description -->
+                    <div class="mb-6">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                            Description
+                        </label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="4"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('description') border-red-500 @enderror"
+                            placeholder="Brief description of the department's role and responsibilities..."
+                        >{{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i> Optional: Add details about this department.
+                        </p>
+                    </div>
 
-    <!-- Info Card -->
-    <div class="max-w-2xl mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <i class="fas fa-lightbulb text-blue-600"></i>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-blue-800">Quick Tips</h3>
-                <div class="mt-2 text-sm text-blue-700">
-                    <ul class="list-disc list-inside space-y-1">
-                        <li>Department names must be unique across your organization</li>
-                        <li>You can assign employees to this department after creation</li>
-                        <li>Empty departments can be deleted at any time</li>
+                    <!-- Error Alert -->
+                    @if($errors->any())
+                        <div class="mb-6 bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle text-red-400"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-red-700 font-medium">
+                                        Please correct the errors above and try again.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-100 mt-6">
+                        <x-admin.action-button :href="route('admin.departments.index')" variant="secondary" icon="fas fa-times">
+                            Cancel
+                        </x-admin.action-button>
+                        <x-admin.action-button type="submit" variant="primary" icon="fas fa-save">
+                            Create Department
+                        </x-admin.action-button>
+                    </div>
+                </form>
+            </x-admin.card>
+        </div>
+
+        <!-- Info Card -->
+        <div class="lg:col-span-1">
+            <x-admin.card title="Quick Tips" class="bg-blue-50 border border-blue-100">
+                <div class="text-sm text-blue-800 space-y-3">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Department names must be <strong>unique</strong> across your organization.</li>
+                        <li>You can assign employees to this department after creation.</li>
+                        <li>Empty departments can be deleted at any time.</li>
+                        <li>Use descriptive summaries for better clarity.</li>
                     </ul>
                 </div>
-            </div>
+            </x-admin.card>
         </div>
     </div>
 </div>

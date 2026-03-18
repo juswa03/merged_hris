@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manual Attendance Entry')
 
@@ -13,14 +13,14 @@
             <x-admin.action-button
                 variant="secondary"
                 icon="fas fa-arrow-left"
-                onclick="window.location.href='{{ route('attendance.index') }}'"
+                onclick="window.location.href='{{ route('admin.attendance.index') }}'"
             >
                 Back to Attendance
             </x-admin.action-button>
         </x-slot>
     </x-admin.page-header>
 
-    <form method="POST" action="{{ route('attendance.store') }}" class="mt-8">
+    <form method="POST" action="{{ route('admin.attendance.store') }}" class="mt-8">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -116,7 +116,7 @@
                                     class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition shadow-md hover:shadow-lg font-semibold flex items-center justify-center gap-2">
                                 <i class="fas fa-save"></i> Save Attendance
                             </button>
-                            <a href="{{ route('attendance.index') }}"
+                            <a href="{{ route('admin.attendance.index') }}"
                                class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition font-semibold flex items-center justify-center gap-2">
                                 <i class="fas fa-times"></i> Cancel
                             </a>

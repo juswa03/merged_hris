@@ -159,111 +159,65 @@
             <strong>For the month of:</strong> {{ strtoupper($monthYear) }}
         </div>
 
-        @php
-            $half = ceil(count($daysInMonth) / 2);
-            $firstHalf = array_slice($daysInMonth, 0, $half);
-            $secondHalf = array_slice($daysInMonth, $half);
-        @endphp
-
-        <table style="width: 100%; border: none; border-collapse: collapse;">
-            <tr>
-                <td style="width: 49%; vertical-align: top; padding: 0; border: none;">
-                    <table class="dtr-table">
-                        <thead>
-                            <tr>
-                                <th rowspan="2" width="10%">DAY</th>
-                                <th colspan="2">A.M.</th>
-                                <th colspan="2">P.M.</th>
-                                <th rowspan="2">UNDERTIME</th>
-                            </tr>
-                            <tr>
-                                <th>ARR</th>
-                                <th>DEP</th>
-                                <th>ARR</th>
-                                <th>DEP</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($firstHalf as $dayData)
-                            <tr>
-                                <td>{{ $dayData['day'] }}</td>
-                                <td>{{ $dayData['am_arrival'] }}</td>
-                                <td>{{ $dayData['am_departure'] }}</td>
-                                <td>{{ $dayData['pm_arrival'] }}</td>
-                                <td>{{ $dayData['pm_departure'] }}</td>
-                                <td>{{ $dayData['undertime_hours'] }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </td>
-                <td style="width: 2%; border: none;"></td>
-                <td style="width: 49%; vertical-align: top; padding: 0; border: none;">
-                    <table class="dtr-table">
-                        <thead>
-                            <tr>
-                                <th rowspan="2" width="10%">DAY</th>
-                                <th colspan="2">A.M.</th>
-                                <th colspan="2">P.M.</th>
-                                <th rowspan="2">UNDERTIME</th>
-                            </tr>
-                            <tr>
-                                <th>ARR</th>
-                                <th>DEP</th>
-                                <th>ARR</th>
-                                <th>DEP</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($secondHalf as $dayData)
-                            <tr>
-                                <td>{{ $dayData['day'] }}</td>
-                                <td>{{ $dayData['am_arrival'] }}</td>
-                                <td>{{ $dayData['am_departure'] }}</td>
-                                <td>{{ $dayData['pm_arrival'] }}</td>
-                                <td>{{ $dayData['pm_departure'] }}</td>
-                                <td>{{ $dayData['undertime_hours'] }}</td>
-                            </tr>
-                            @endforeach
-                            <!-- Fill empty rows if needed to match height -->
-                            @for($i = 0; $i < (count($firstHalf) - count($secondHalf)); $i++)
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            @endfor
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
+        <table class="dtr-table" style="margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th rowspan="2" width="8%">DAY</th>
+                    <th colspan="2">A.M.</th>
+                    <th colspan="2">P.M.</th>
+                    <th colspan="2">UNDERTIME</th>
+                </tr>
+                <tr>
+                    <th>ARR</th>
+                    <th>DEP</th>
+                    <th>ARR</th>
+                    <th>DEP</th>
+                    <th>HRS</th>
+                    <th>MINS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($daysInMonth as $dayData)
+                <tr>
+                    <td>{{ $dayData['day'] }}</td>
+                    <td>{{ $dayData['am_arrival'] ?: '-' }}</td>
+                    <td>{{ $dayData['am_departure'] ?: '-' }}</td>
+                    <td>{{ $dayData['pm_arrival'] ?: '-' }}</td>
+                    <td>{{ $dayData['pm_departure'] ?: '-' }}</td>
+                    <td>{{ $dayData['undertime_hrs'] !== null ? ($dayData['undertime_hrs'] > 0 ? $dayData['undertime_hrs'] : '-') : '-' }}</td>
+                    <td>{{ $dayData['undertime_mins'] !== null ? ($dayData['undertime_mins'] > 0 ? $dayData['undertime_mins'] : '-') : '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="5" style="text-align: right; padding-right: 6px;">TOTAL UNDERTIME:</td>
+                    <td>{{ $totalUndertimeHours > 0 ? $totalUndertimeHours : '-' }}</td>
+                    <td>{{ $totalUndertimeMins > 0 ? $totalUndertimeMins : '-' }}</td>
+                </tr>
+            </tfoot>
         </table>
 
-        <div style="margin-top: 10px; font-size: 11px; font-weight: bold; text-align: right;">
-            Total Undertime: {{ $totalUndertime }}
-        </div>
+
 
         <div class="certification">
             I certify on my honor that the above is a true and correct report of the hours of work performed,
             record of which was made daily at the time of arrival and departure from office.
         </div>
 
-        <div class="signature-section">
-            <div class="signature-line"></div>
-            <strong>{{ strtoupper($employee->first_name . ' ' . $employee->last_name) }}</strong>
-        </div>
-
-        <div style="margin-top: 20px; font-size: 11px; text-align: center;">
-            VERIFIED as to the prescribed office hours:
-        </div>
-
-        <div class="signature-section">
-            <div class="signature-line"></div>
-            <strong>IN-CHARGE</strong>
-        </div>
+        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 30px;">
+            <tr>
+                <td style="width: 50%; text-align: center; border: none; vertical-align: bottom; padding: 0 20px;">
+                    <div class="signature-line" style="margin: 15px auto 2px;"></div>
+                    <strong>{{ strtoupper($employee->first_name . ' ' . $employee->last_name) }}</strong>
+                </td>
+                <td style="width: 50%; text-align: center; border: none; vertical-align: bottom; padding: 0 20px;">
+                    <div style="font-size: 11px; margin-bottom: 4px;">VERIFIED as to the prescribed office hours:</div>
+                    <div class="signature-line" style="margin: 15px auto 2px;"></div>
+                    <strong>IN-CHARGE</strong>
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>

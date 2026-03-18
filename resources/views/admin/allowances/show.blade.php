@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 @section('title', 'Allowance Details')
 @section('content')
 <div class="container mx-auto px-4 py-6">
@@ -7,13 +7,13 @@
             <h1 class="text-3xl font-bold text-gray-900">{{ $allowance->name }}</h1>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('allowances.assign', $allowance->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+            <a href="{{ route('admin.allowances.assign', $allowance->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                 <i class="fas fa-user-plus mr-2"></i>Assign
             </a>
-            <a href="{{ route('allowances.edit', $allowance->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+            <a href="{{ route('admin.allowances.edit', $allowance->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                 <i class="fas fa-edit mr-2"></i>Edit
             </a>
-            <a href="{{ route('allowances.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg">Back</a>
+            <a href="{{ route('admin.allowances.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg">Back</a>
         </div>
     </div>
     @if(session('success'))
@@ -61,7 +61,7 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <form action="{{ route('allowances.removeAssignment', [$allowance->id, $empAll->employee->id]) }}" method="POST" class="inline"
+                        <form action="{{ route('admin.allowances.removeAssignment', [$allowance->id, $empAll->employee->id]) }}" method="POST" class="inline"
                               onsubmit="return confirm('Remove allowance?');">
                             @csrf
                             @method('DELETE')
@@ -73,7 +73,7 @@
                 <tr>
                     <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                         <p>No employees assigned</p>
-                        <a href="{{ route('allowances.assign', $allowance->id) }}" class="text-blue-600 text-sm mt-2 inline-block">Assign now</a>
+                        <a href="{{ route('admin.allowances.assign', $allowance->id) }}" class="text-blue-600 text-sm mt-2 inline-block">Assign now</a>
                     </td>
                 </tr>
                 @endforelse

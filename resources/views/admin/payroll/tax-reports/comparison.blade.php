@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <a href="{{ route('payroll.tax-reports.index') }}" class="text-blue-600 hover:text-blue-900 mb-4 inline-block">← Back to Tax Reports</a>
+            <a href="{{ route('admin.payroll.tax-reports.index') }}" class="text-blue-600 hover:text-blue-900 mb-4 inline-block">← Back to Tax Reports</a>
             <h1 class="text-4xl font-bold text-slate-900 mb-2">Tax Liability Comparison</h1>
             <p class="text-slate-600">Compare tax obligations between regular employees and self-employed individuals</p>
         </div>

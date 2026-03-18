@@ -1,68 +1,52 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payroll Reports')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Payroll Reports & Analytics</h1>
-        <p class="mt-2 text-sm text-gray-600">Comprehensive payroll reporting and data analysis</p>
-    </div>
+    <x-admin.page-header
+        title="Payroll Reports & Analytics"
+        description="Comprehensive payroll reporting and data analysis"
+    />
 
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Current Month Payroll</p>
-                    <p class="text-2xl font-semibold text-gray-900">₱{{ number_format($stats['current_month_payroll'], 2) }}</p>
-                    <p class="text-xs text-gray-500 mt-1">{{ $stats['current_month_employees'] }} employees</p>
-                </div>
-                <div class="p-3 bg-blue-100 rounded-full">
-                    <i class="fas fa-money-bill-wave text-blue-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
+        <x-admin.gradient-stat-card 
+            title="Current Month Payroll" 
+            :value="'₱' . number_format($stats['current_month_payroll'], 2)" 
+            icon="fas fa-money-bill-wave" 
+            gradientFrom="blue-500" 
+            gradientTo="blue-600"
+            :description="$stats['current_month_employees'] . ' employees'"
+        />
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Year-to-Date Payroll</p>
-                    <p class="text-2xl font-semibold text-gray-900">₱{{ number_format($stats['total_ytd_payroll'], 2) }}</p>
-                    <p class="text-xs text-gray-500 mt-1">{{ now()->format('Y') }}</p>
-                </div>
-                <div class="p-3 bg-green-100 rounded-full">
-                    <i class="fas fa-chart-line text-green-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
+        <x-admin.gradient-stat-card 
+            title="Year-to-Date Payroll" 
+            :value="'₱' . number_format($stats['total_ytd_payroll'], 2)" 
+            icon="fas fa-chart-line" 
+            gradientFrom="green-500" 
+            gradientTo="green-600"
+            :description="now()->format('Y')"
+        />
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Avg. Employee Salary</p>
-                    <p class="text-2xl font-semibold text-gray-900">₱{{ number_format($stats['avg_employee_salary'], 2) }}</p>
-                    <p class="text-xs text-gray-500 mt-1">YTD Average</p>
-                </div>
-                <div class="p-3 bg-purple-100 rounded-full">
-                    <i class="fas fa-calculator text-purple-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
+        <x-admin.gradient-stat-card 
+            title="Avg. Employee Salary" 
+            :value="'₱' . number_format($stats['avg_employee_salary'], 2)" 
+            icon="fas fa-calculator" 
+            gradientFrom="purple-500" 
+            gradientTo="purple-600"
+            description="YTD Average"
+        />
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Available Periods</p>
-                    <p class="text-3xl font-semibold text-gray-900">{{ $periods->count() }}</p>
-                    <p class="text-xs text-gray-500 mt-1">Last 12 periods</p>
-                </div>
-                <div class="p-3 bg-yellow-100 rounded-full">
-                    <i class="fas fa-calendar-alt text-yellow-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
+        <x-admin.gradient-stat-card 
+            title="Available Periods" 
+            :value="$periods->count()" 
+            icon="fas fa-calendar-alt" 
+            gradientFrom="yellow-500" 
+            gradientTo="yellow-600"
+            description="Last 12 periods"
+        />
     </div>
 
     <!-- Report Cards -->
@@ -82,7 +66,7 @@
                 <p class="text-sm text-gray-600 mb-4">
                     Comprehensive monthly payroll report with gross pay, deductions, and net pay details for all employees.
                 </p>
-                <a href="{{ route('payroll.reports.monthly-summary') }}"
+                <a href="{{ route('admin.payroll.reports.monthly-summary') }}"
                    class="block w-full text-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
                     <i class="fas fa-arrow-right mr-2"></i> View Report
                 </a>
@@ -104,7 +88,7 @@
                 <p class="text-sm text-gray-600 mb-4">
                     Analyze payroll costs across departments with employee counts, averages, and totals per department.
                 </p>
-                <a href="{{ route('payroll.reports.department-breakdown') }}"
+                <a href="{{ route('admin.payroll.reports.department-breakdown') }}"
                    class="block w-full text-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors">
                     <i class="fas fa-arrow-right mr-2"></i> View Report
                 </a>
@@ -126,7 +110,7 @@
                 <p class="text-sm text-gray-600 mb-4">
                     Track mandatory government contributions including SSS, PhilHealth, Pag-IBIG, and withholding tax.
                 </p>
-                <a href="{{ route('payroll.reports.government-contributions') }}"
+                <a href="{{ route('admin.payroll.reports.government-contributions') }}"
                    class="block w-full text-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors">
                     <i class="fas fa-arrow-right mr-2"></i> View Report
                 </a>
@@ -148,7 +132,7 @@
                 <p class="text-sm text-gray-600 mb-4">
                     Year-to-date summary of all employee earnings, deductions, and net pay for tax and compliance purposes.
                 </p>
-                <a href="{{ route('payroll.reports.ytd-earnings') }}"
+                <a href="{{ route('admin.payroll.reports.ytd-earnings') }}"
                    class="block w-full text-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md transition-colors">
                     <i class="fas fa-arrow-right mr-2"></i> View Report
                 </a>
@@ -170,7 +154,7 @@
                 <p class="text-sm text-gray-600 mb-4">
                     Comprehensive report of all deductions (late, absent, undertime) and allowances affecting payroll.
                 </p>
-                <a href="{{ route('payroll.reports.deductions-allowances') }}"
+                <a href="{{ route('admin.payroll.reports.deductions-allowances') }}"
                    class="block w-full text-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors">
                     <i class="fas fa-arrow-right mr-2"></i> View Report
                 </a>

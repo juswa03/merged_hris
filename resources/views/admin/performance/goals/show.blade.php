@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Goal Details')
 
@@ -8,7 +8,7 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('performance.goals.index') }}" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ route('admin.performance.goals.index') }}" class="text-gray-600 hover:text-gray-900">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('performance.goals.edit', $goal->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
+                <a href="{{ route('admin.performance.goals.edit', $goal->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
                     <i class="fas fa-edit mr-2"></i> Edit
                 </a>
                 <button onclick="deleteGoal({{ $goal->id }})" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">
@@ -218,11 +218,11 @@
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                 <div class="space-y-2">
-                    <a href="{{ route('performance.goals.edit', $goal->id) }}"
+                    <a href="{{ route('admin.performance.goals.edit', $goal->id) }}"
                        class="block w-full px-4 py-2 text-center bg-blue-600 hover:bg-blue-700 text-white rounded-md">
                         <i class="fas fa-edit mr-2"></i> Update Progress
                     </a>
-                    <a href="{{ route('performance.goals.index', ['employee_id' => $goal->employee_id]) }}"
+                    <a href="{{ route('admin.performance.goals.index', ['employee_id' => $goal->employee_id]) }}"
                        class="block w-full px-4 py-2 text-center bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md">
                         <i class="fas fa-list mr-2"></i> View All Employee Goals
                     </a>
@@ -278,7 +278,7 @@ function deleteGoal() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = '{{ route("performance.goals.index") }}';
+                window.location.href = '{{ route("admin.performance.goals.index") }}';
             } else {
                 alert(data.message);
             }

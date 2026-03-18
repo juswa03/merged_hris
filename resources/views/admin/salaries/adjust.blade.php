@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Adjust Employee Salary')
 
@@ -9,7 +9,7 @@
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('salaries.index') }}" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
+                    <a href="{{ route('admin.salaries.index') }}" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
                         <i class="fas fa-dollar-sign mr-2"></i>
                         Salary Management
                     </a>
@@ -17,7 +17,7 @@
                 <li>
                     <div class="flex items-center">
                         <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <a href="{{ route('salaries.show', $employee->id) }}" class="text-gray-700 hover:text-blue-600">
+                        <a href="{{ route('admin.salaries.show', $employee->id) }}" class="text-gray-700 hover:text-blue-600">
                             {{ $employee->first_name }} {{ $employee->last_name }}
                         </a>
                     </div>
@@ -80,7 +80,7 @@
 
         <!-- Adjustment Form -->
         <div class="lg:col-span-2">
-            <form action="{{ route('salaries.adjust', $employee->id) }}" method="POST" id="salaryAdjustForm">
+            <form action="{{ route('admin.salaries.adjust', $employee->id) }}" method="POST" id="salaryAdjustForm">
                 @csrf
                 <div class="bg-white rounded-lg shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
@@ -243,7 +243,7 @@
                     </div>
 
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-                        <a href="{{ route('salaries.show', $employee->id) }}" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <a href="{{ route('admin.salaries.show', $employee->id) }}" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Cancel
                         </a>
                         <button
@@ -273,7 +273,7 @@ async function updateSalaryFromGrade() {
     }
 
     try {
-        const response = await fetch('{{ route("salary-grades.get-salary") }}', {
+        const response = await fetch('{{ route("admin.salary-grades.get-salary") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',

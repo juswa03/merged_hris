@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Biometric Enrollment')
 
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <a href="{{ route('biometric.enrolled') }}" class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out flex items-center shadow-sm">
+                        <a href="{{ route('admin.biometric.enrolled') }}" class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out flex items-center shadow-sm">
                             <i class="fas fa-list mr-2"></i> View Enrolled
                         </a>
                         <!-- Stats -->

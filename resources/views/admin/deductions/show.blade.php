@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Deduction Details')
 
@@ -12,13 +12,13 @@
                 <p class="mt-2 text-sm text-gray-600">Deduction details and assignments</p>
             </div>
             <div class="flex items-center gap-3">
-                <a href="{{ route('deductions.assign', $deduction->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <a href="{{ route('admin.deductions.assign', $deduction->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     <i class="fas fa-user-plus mr-2"></i>Assign to Employees
                 </a>
-                <a href="{{ route('deductions.edit', $deduction->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <a href="{{ route('admin.deductions.edit', $deduction->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     <i class="fas fa-edit mr-2"></i>Edit
                 </a>
-                <a href="{{ route('deductions.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                <a href="{{ route('admin.deductions.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>Back
                 </a>
             </div>
@@ -145,7 +145,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
-                            <form action="{{ route('deductions.removeAssignment', [$deduction->id, $empDed->employee->id]) }}" method="POST" class="inline"
+                            <form action="{{ route('admin.deductions.removeAssignment', [$deduction->id, $empDed->employee->id]) }}" method="POST" class="inline"
                                   onsubmit="return confirm('Remove this deduction from {{ $empDed->employee->full_name }}?');">
                                 @csrf
                                 @method('DELETE')
@@ -160,7 +160,7 @@
                         <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                             <i class="fas fa-users-slash text-4xl mb-2"></i>
                             <p>No employees assigned to this deduction yet</p>
-                            <a href="{{ route('deductions.assign', $deduction->id) }}" class="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block">
+                            <a href="{{ route('admin.deductions.assign', $deduction->id) }}" class="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block">
                                 <i class="fas fa-user-plus mr-1"></i>Assign employees now
                             </a>
                         </td>

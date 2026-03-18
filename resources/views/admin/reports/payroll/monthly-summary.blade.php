@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Monthly Payroll Summary')
 
@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3 mb-4">
-            <a href="{{ route('payroll.reports.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.payroll.reports.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
@@ -18,7 +18,7 @@
 
         <!-- Period Selector -->
         <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <form action="{{ route('payroll.reports.monthly-summary') }}" method="GET" class="flex gap-3">
+            <form action="{{ route('admin.payroll.reports.monthly-summary') }}" method="GET" class="flex gap-3">
                 <select name="period_id" onchange="this.form.submit()"
                         class="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     <option value="">-- Select Payroll Period --</option>
@@ -31,7 +31,7 @@
             </form>
 
             @if($period)
-            <a href="{{ route('payroll.reports.export-monthly-summary-csv', ['period_id' => $period->id]) }}"
+            <a href="{{ route('admin.payroll.reports.export-monthly-summary-csv', ['period_id' => $period->id]) }}"
                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">
                 <i class="fas fa-download mr-2"></i> Export to CSV
             </a>

@@ -26,6 +26,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // Always eager-load role to prevent N+1 queries on permission checks across the app
+    protected $with = ['role'];
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_logged_at' => 'datetime',
@@ -63,7 +66,13 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return in_array($this->role->name ?? '', ['Super Admin', 'Admin']);
+        try {
+            $roleName = $this->role?->name ?? '';
+            return in_array($roleName, ['Super Admin', 'Admin']);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('isAdmin check failed: ' . $e->getMessage(), ['user_id' => $this->id]);
+            return false;
+        }
     }
 
     /**
@@ -71,7 +80,13 @@ class User extends Authenticatable
      */
     public function isHR(): bool
     {
-        return $this->hasRole('HR') || $this->hasRole('hr');
+        try {
+            $roleName = $this->role?->name ?? '';
+            return in_array($roleName, ['HR', 'hr', 'HR Staff']);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('isHR check failed: ' . $e->getMessage(), ['user_id' => $this->id]);
+            return false;
+        }
     }
 
     /**
@@ -79,7 +94,13 @@ class User extends Authenticatable
      */
     public function isEmployee(): bool
     {
-        return $this->hasRole('Employee') || $this->hasRole('employee');
+        try {
+            $roleName = $this->role?->name ?? '';
+            return in_array($roleName, ['Employee', 'employee']);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('isEmployee check failed: ' . $e->getMessage(), ['user_id' => $this->id]);
+            return false;
+        }
     }
 
     /**

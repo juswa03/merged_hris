@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Employee Salary Details')
 
@@ -9,7 +9,7 @@
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('salaries.index') }}" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
+                    <a href="{{ route('admin.salaries.index') }}" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
                         <i class="fas fa-dollar-sign mr-2"></i>
                         Salary Management
                     </a>
@@ -31,10 +31,10 @@
             <p class="mt-2 text-sm text-gray-600">View and manage employee salary information</p>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('salaries.adjust-form', $employee->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center">
+            <a href="{{ route('admin.salaries.adjust-form', $employee->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center">
                 <i class="fas fa-edit mr-2"></i> Adjust Salary
             </a>
-            <a href="{{ route('salaries.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded flex items-center">
+            <a href="{{ route('admin.salaries.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i> Back
             </a>
         </div>

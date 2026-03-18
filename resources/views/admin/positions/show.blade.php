@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Position Details')
 
@@ -8,7 +8,7 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('positions.index') }}" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ route('admin.positions.index') }}" class="text-gray-600 hover:text-gray-900">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('positions.edit', $position->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
+                <a href="{{ route('admin.positions.edit', $position->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
                     <i class="fas fa-edit mr-2"></i> Edit
                 </a>
                 <button onclick="deletePosition()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">
@@ -322,7 +322,7 @@ function deletePosition() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = '{{ route("positions.index") }}';
+                window.location.href = '{{ route("admin.positions.index") }}';
             } else {
                 alert(data.message);
             }

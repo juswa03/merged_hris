@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Assign Deduction to Employees')
 
@@ -14,7 +14,7 @@
         <!-- Assignment Form -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-lg shadow p-6">
-                <form action="{{ route('deductions.storeAssignment', $deduction->id) }}" method="POST">
+                <form action="{{ route('admin.deductions.storeAssignment', $deduction->id) }}" method="POST">
                     @csrf
 
                     <div class="mb-6 p-4 bg-blue-50 rounded-lg">
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="flex items-center justify-end gap-3">
-                        <a href="{{ route('deductions.show', $deduction->id) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                        <a href="{{ route('admin.deductions.show', $deduction->id) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
                             Cancel
                         </a>
                         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">

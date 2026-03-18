@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
@@ -6,11 +6,11 @@
         <!-- Header -->
         <div class="mb-8 flex items-center justify-between">
             <div>
-                <a href="{{ route('payroll.tax-reports.index') }}" class="text-blue-600 hover:text-blue-900 mb-4 inline-block">← Back to Tax Reports</a>
+                <a href="{{ route('admin.payroll.tax-reports.index') }}" class="text-blue-600 hover:text-blue-900 mb-4 inline-block">← Back to Tax Reports</a>
                 <h1 class="text-4xl font-bold text-slate-900">{{ $employee->full_name }}'s Tax Details</h1>
                 <p class="text-slate-600 mt-2">Employee ID: {{ $employee->employee_id }} | Year: {{ $year }}</p>
             </div>
-            <a href="{{ route('payroll.tax-reports.download-form-2316', ['employee' => $employee->id, 'year' => $year]) }}" class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition">
+            <a href="{{ route('admin.payroll.tax-reports.download-form-2316', ['employee' => $employee->id, 'year' => $year]) }}" class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition">
                 Download Form 2316
             </a>
         </div>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="mt-6 pt-6 border-t border-slate-200">
-                <a href="{{ route('payroll.tax-reports.download-form-2316', ['employee' => $employee->id, 'year' => $year]) }}" class="inline-block bg-amber-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-amber-700 transition">
+                <a href="{{ route('admin.payroll.tax-reports.download-form-2316', ['employee' => $employee->id, 'year' => $year]) }}" class="inline-block bg-amber-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-amber-700 transition">
                     Download Form 2316 (PDF)
                 </a>
             </div>
@@ -161,7 +161,7 @@
                             <td class="px-6 py-4 text-sm text-slate-600">₱{{ number_format($payroll->pagibig_contribution ?? 0, 2) }}</td>
                             <td class="px-6 py-4 text-sm font-semibold text-green-600">₱{{ number_format($payroll->net_pay, 2) }}</td>
                             <td class="px-6 py-4 text-sm">
-                                <a href="{{ route('payroll.show', $payroll->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
+                                <a href="{{ route('admin.payroll.show', $payroll->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
                                     View
                                 </a>
                             </td>

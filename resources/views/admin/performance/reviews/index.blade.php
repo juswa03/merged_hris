@@ -1,86 +1,65 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Performance Reviews')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <!-- Page Header -->
-    <div class="mb-6 flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Performance Reviews</h1>
-            <p class="text-sm text-gray-600 mt-1">Manage and track employee performance evaluations</p>
-        </div>
-        <a href="{{ route('performance.reviews.create') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
-            <i class="fas fa-plus mr-2"></i> New Review
-        </a>
-    </div>
+
+    <x-admin.page-header
+        title="Performance Reviews"
+        description="Manage and track employee performance evaluations"
+    >
+        <x-slot name="actions">
+            <x-admin.action-button href="{{ route('admin.performance.reviews.create') }}" icon="fas fa-plus">
+                New Review
+            </x-admin.action-button>
+        </x-slot>
+    </x-admin.page-header>
 
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Reviews</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ $stats['total_reviews'] }}</p>
-                </div>
-                <div class="bg-blue-100 rounded-full p-3">
-                    <i class="fas fa-clipboard-list text-blue-600 text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Pending Reviews</p>
-                    <p class="text-2xl font-bold text-yellow-600 mt-1">{{ $stats['pending_reviews'] }}</p>
-                </div>
-                <div class="bg-yellow-100 rounded-full p-3">
-                    <i class="fas fa-clock text-yellow-600 text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Completed Reviews</p>
-                    <p class="text-2xl font-bold text-green-600 mt-1">{{ $stats['completed_reviews'] }}</p>
-                </div>
-                <div class="bg-green-100 rounded-full p-3">
-                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Average Rating</p>
-                    <p class="text-2xl font-bold text-purple-600 mt-1">{{ number_format($stats['avg_rating'] ?? 0, 2) }}</p>
-                </div>
-                <div class="bg-purple-100 rounded-full p-3">
-                    <i class="fas fa-star text-purple-600 text-xl"></i>
-                </div>
-            </div>
-        </div>
+        <x-admin.gradient-stat-card
+            title="Total Reviews"
+            :value="$stats['total_reviews']"
+            icon="fas fa-clipboard-list"
+            gradientFrom="blue-500"
+            gradientTo="blue-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Pending Reviews"
+            :value="$stats['pending_reviews']"
+            icon="fas fa-clock"
+            gradientFrom="yellow-500"
+            gradientTo="yellow-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Completed Reviews"
+            :value="$stats['completed_reviews']"
+            icon="fas fa-check-circle"
+            gradientFrom="green-500"
+            gradientTo="green-600"
+        />
+        <x-admin.gradient-stat-card
+            title="Average Rating"
+            :value="number_format($stats['avg_rating'] ?? 0, 2)"
+            icon="fas fa-star"
+            gradientFrom="purple-500"
+            gradientTo="purple-600"
+        />
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form method="GET" action="{{ route('performance.reviews.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <!-- Search -->
+    <x-admin.card class="mb-6">
+        <form method="GET" action="{{ route('admin.performance.reviews.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div class="md:col-span-2">
                 <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search Employee</label>
                 <input type="text" name="search" id="search" value="{{ request('search') }}"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                        placeholder="Search by employee name...">
             </div>
-
-            <!-- Status Filter -->
             <div>
                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                <select name="status" id="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     <option value="">All Statuses</option>
                     <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
@@ -88,11 +67,9 @@
                     <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
                 </select>
             </div>
-
-            <!-- Review Type Filter -->
             <div>
                 <label for="review_type" class="block text-sm font-medium text-gray-700 mb-1">Review Type</label>
-                <select name="review_type" id="review_type" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                <select name="review_type" id="review_type" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     <option value="">All Types</option>
                     <option value="annual" {{ request('review_type') === 'annual' ? 'selected' : '' }}>Annual</option>
                     <option value="mid_year" {{ request('review_type') === 'mid_year' ? 'selected' : '' }}>Mid-Year</option>
@@ -100,18 +77,17 @@
                     <option value="probation" {{ request('review_type') === 'probation' ? 'selected' : '' }}>Probation</option>
                 </select>
             </div>
-
-            <!-- Filter Button -->
             <div class="flex items-end">
-                <button type="submit" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
-                    <i class="fas fa-filter mr-2"></i> Filter
-                </button>
+                <x-admin.action-button type="submit" variant="primary" icon="fas fa-filter" class="w-full justify-center">
+                    Filter
+                </x-admin.action-button>
             </div>
         </form>
-    </div>
+    </x-admin.card>
 
     <!-- Reviews Table -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <x-admin.card :padding="false">
+        <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -183,12 +159,12 @@
                         {{ $review->reviewer->email ?? 'N/A' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <a href="{{ route('performance.reviews.show', $review->id) }}"
+                        <a href="{{ route('admin.performance.reviews.show', $review->id) }}"
                            class="text-blue-600 hover:text-blue-900 mr-3" title="View">
                             <i class="fas fa-eye"></i>
                         </a>
                         @if($review->status === 'draft')
-                        <a href="{{ route('performance.reviews.evaluate', $review->id) }}"
+                        <a href="{{ route('admin.performance.reviews.evaluate', $review->id) }}"
                            class="text-green-600 hover:text-green-900 mr-3" title="Evaluate">
                             <i class="fas fa-edit"></i>
                         </a>
@@ -202,24 +178,24 @@
                 @empty
                 <tr>
                     <td colspan="7" class="px-6 py-12 text-center">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-clipboard-list text-gray-400 text-5xl mb-4"></i>
-                            <p class="text-gray-500 text-lg">No performance reviews found</p>
-                            <p class="text-gray-400 text-sm mt-2">Create a new review to get started</p>
-                        </div>
+                        <x-admin.empty-state
+                            icon="fas fa-clipboard-list"
+                            title="No performance reviews found"
+                            description="Create a new review to get started"
+                        />
                     </td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
-
-        <!-- Pagination -->
-        @if($reviews->hasPages())
-        <div class="bg-gray-50 px-6 py-4">
-            {{ $reviews->links() }}
         </div>
+
+        @if($reviews->hasPages())
+        <x-slot name="footer">
+            {{ $reviews->links() }}
+        </x-slot>
         @endif
-    </div>
+    </x-admin.card>
 </div>
 
 @push('scripts')

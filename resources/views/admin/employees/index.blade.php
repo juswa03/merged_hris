@@ -1,8 +1,26 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Employee Management')
 
 @section('content')
+<div class="container mx-auto px-4 py-6">
+    <x-admin.page-header
+        title="Employee Management"
+        description="Manage all employees, their information, and employment status"
+    >
+        <x-slot name="actions">
+            <x-admin.action-button href="{{ route('admin.employees.export') }}" variant="secondary" icon="fas fa-file-export">Export</x-admin.action-button>
+        </x-slot>
+    </x-admin.page-header>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <x-admin.gradient-stat-card title="Total Employees" :value="$stats['total']" icon="fas fa-users" gradientFrom="blue-500" gradientTo="blue-600"/>
+        <x-admin.gradient-stat-card title="Active" :value="$stats['active']" icon="fas fa-user-check" gradientFrom="green-500" gradientTo="green-600"/>
+        <x-admin.gradient-stat-card title="On Leave" :value="$stats['on_leave']" icon="fas fa-user-clock" gradientFrom="yellow-500" gradientTo="yellow-600"/>
+        <x-admin.gradient-stat-card title="Terminated / Inactive" :value="$stats['terminated']" icon="fas fa-user-times" gradientFrom="red-500" gradientTo="red-600"/>
+    </div>
+
 <div class="flex flex-col h-full" x-data="employeeModule()" x-cloak>
     <!-- Employee Actions -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -762,6 +780,7 @@
         </div>
     </div>
 </div>
+</div>
 
 @push('scripts')
 <script>
@@ -1017,7 +1036,7 @@
                 }
 
                 try {
-                    const response = await fetch('{{ route("salary-grades.get-salary") }}', {
+                    const response = await fetch('{{ route("admin.salary-grades.get-salary") }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',

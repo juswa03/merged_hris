@@ -1,133 +1,66 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'DTR Management')
 
 @section('content')
 
 <div class="container mx-auto px-4 py-6">
-    <!-- Page Header -->
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">DTR Management</h1>
-        <p class="mt-2 text-sm text-gray-600">View and manage Daily Time Records for all employees</p>
-    </div>
+    <x-admin.page-header
+        title="DTR Management"
+        description="View and manage Daily Time Records for all employees"
+    >
+        <x-slot name="actions">
+            <x-admin.action-button :href="route('admin.dtr.export', request()->all())" variant="success" icon="fas fa-file-pdf">Export to PDF</x-admin.action-button>
+        </x-slot>
+    </x-admin.page-header>
 
     <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Employees</p>
-                    <p class="text-3xl font-semibold text-gray-900">{{ $totalEmployees }}</p>
-                </div>
-                <div class="p-3 bg-blue-100 rounded-full">
-                    <i class="fas fa-users text-blue-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Work Days</p>
-                    <p class="text-3xl font-semibold text-gray-900">{{ $totalWorkDays }}</p>
-                </div>
-                <div class="p-3 bg-green-100 rounded-full">
-                    <i class="fas fa-calendar-check text-green-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Absences</p>
-                    <p class="text-3xl font-semibold text-gray-900">{{ $totalAbsences }}</p>
-                </div>
-                <div class="p-3 bg-red-100 rounded-full">
-                    <i class="fas fa-user-times text-red-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">Total Undertime</p>
-                    <p class="text-3xl font-semibold text-gray-900">{{ floor($totalUndertime / 60) }}h {{ $totalUndertime % 60 }}m</p>
-                </div>
-                <div class="p-3 bg-yellow-100 rounded-full">
-                    <i class="fas fa-clock text-yellow-600 text-2xl"></i>
-                </div>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <x-admin.gradient-stat-card title="Total Employees" :value="$totalEmployees" icon="fas fa-users" gradientFrom="blue-500" gradientTo="blue-600"/>
+        <x-admin.gradient-stat-card title="Work Days" :value="$totalWorkDays" icon="fas fa-calendar-check" gradientFrom="green-500" gradientTo="green-600"/>
+        <x-admin.gradient-stat-card title="Total Absences" :value="$totalAbsences" icon="fas fa-user-times" gradientFrom="red-500" gradientTo="red-600"/>
+        <x-admin.gradient-stat-card title="Total Undertime" :value="floor($totalUndertime / 60) . 'h ' . ($totalUndertime % 60) . 'm'" icon="fas fa-clock" gradientFrom="yellow-500" gradientTo="yellow-600"/>
     </div>
 
     <!-- Filters and Actions -->
-    <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <form method="GET" action="{{ route('dtr.index') }}" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Month Picker -->
+    <x-admin.card title="Filters" class="mb-6">
+        <form method="GET" action="{{ route('admin.dtr.index') }}">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                 <div>
-                    <label for="month" class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+                    <label for="month" class="block text-sm font-medium text-gray-700 mb-1">Month</label>
                     <input type="month" id="month" name="month" value="{{ $month }}"
-                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
-
-                <!-- Employee Filter -->
                 <div>
-                    <label for="employee_id" class="block text-sm font-medium text-gray-700 mb-2">Employee</label>
-                    <select id="employee_id" name="employee_id"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <label for="employee_id" class="block text-sm font-medium text-gray-700 mb-1">Employee</label>
+                    <select id="employee_id" name="employee_id" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         <option value="">All Employees</option>
                         @foreach($employees as $emp)
-                            <option value="{{ $emp->id }}" {{ request('employee_id') == $emp->id ? 'selected' : '' }}>
-                                {{ $emp->full_name }}
-                            </option>
+                            <option value="{{ $emp->id }}" {{ request('employee_id') == $emp->id ? 'selected' : '' }}>{{ $emp->full_name }}</option>
                         @endforeach
                     </select>
                 </div>
-
-                <!-- Department Filter -->
                 <div>
-                    <label for="department_id" class="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                    <select id="department_id" name="department_id"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <label for="department_id" class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                    <select id="department_id" name="department_id" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         <option value="">All Departments</option>
                         @foreach($departments as $dept)
-                            <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
-                                {{ $dept->name }}
-                            </option>
+                            <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>{{ $dept->name }}</option>
                         @endforeach
                     </select>
                 </div>
-
-                <!-- Search -->
                 <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                    <input type="text" id="search" name="search" value="{{ request('search') }}"
-                           placeholder="Search employee..."
-                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Search employee..."
+                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
             </div>
-
-            <div class="flex items-center justify-between pt-4 border-t">
-                <div class="flex items-center gap-3">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        <i class="fas fa-filter mr-2"></i>Apply Filters
-                    </button>
-                    <a href="{{ route('dtr.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
-                        <i class="fas fa-redo mr-2"></i>Reset
-                    </a>
-                </div>
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('dtr.export', request()->all()) }}"
-                       class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        <i class="fas fa-file-csv mr-2"></i>Export to CSV
-                    </a>
-                </div>
+            <div class="flex gap-3">
+                <x-admin.action-button type="submit" variant="primary" icon="fas fa-filter">Apply Filters</x-admin.action-button>
+                <x-admin.action-button :href="route('admin.dtr.index')" variant="secondary" icon="fas fa-redo">Reset</x-admin.action-button>
             </div>
         </form>
-    </div>
+    </x-admin.card>
 
     <!-- DTR Summary by Employee -->
     <div class="space-y-4">
@@ -154,7 +87,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        <a href="{{ route('dtr.show', ['employee' => $data['employee']->id, 'month' => $month]) }}"
+                        <a href="{{ route('admin.dtr.show', ['employee' => $data['employee']->id, 'month' => $month]) }}"
                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                             <i class="fas fa-eye mr-2"></i>View Full DTR
                         </a>
@@ -240,7 +173,7 @@
                                     @endif
                                 </td>
                                 <td class="px-3 py-2 whitespace-nowrap text-center text-sm">
-                                    <a href="{{ route('dtr.edit', $entry->id) }}"
+                                    <a href="{{ route('admin.dtr.edit', $entry->id) }}"
                                        class="text-blue-600 hover:text-blue-800 font-medium">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -252,7 +185,7 @@
                 </div>
                 @if($data['entries']->count() > 7)
                 <div class="text-center mt-4">
-                    <a href="{{ route('dtr.show', ['employee' => $data['employee']->id, 'month' => $month]) }}"
+                    <a href="{{ route('admin.dtr.show', ['employee' => $data['employee']->id, 'month' => $month]) }}"
                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                         View all {{ $data['entries']->count() }} entries <i class="fas fa-arrow-right ml-1"></i>
                     </a>
@@ -262,9 +195,11 @@
         </div>
         @empty
         <div class="bg-white rounded-lg shadow p-12 text-center">
-            <i class="fas fa-calendar-times text-gray-400 text-6xl mb-4"></i>
-            <h3 class="text-xl font-semibold text-gray-700 mb-2">No DTR Records Found</h3>
-            <p class="text-gray-500">No DTR records found for the selected filters. Try adjusting your search criteria.</p>
+            <x-admin.empty-state
+                icon="fas fa-calendar-times"
+                title="No DTR Records Found"
+                message="No DTR records found for the selected filters. Try adjusting your search criteria."
+            />
         </div>
         @endforelse
     </div>

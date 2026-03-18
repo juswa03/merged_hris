@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Validate DTR - Payroll Generation')
 
@@ -111,11 +111,11 @@
 
         <!-- Action Buttons -->
         <div class="flex gap-3">
-            <a href="{{ route('payroll.generation.index') }}" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition text-center">
+            <a href="{{ route('admin.payroll.generation.index') }}" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition text-center">
                 <i class="fas fa-arrow-left mr-2"></i> Back
             </a>
             @if(($validation['missing_count'] ?? 0) === 0 && ($validation['incomplete_count'] ?? 0) === 0)
-                <form method="POST" action="{{ route('payroll.generation.generate', $period->id) }}" class="flex-1">
+                <form method="POST" action="{{ route('admin.payroll.generation.generate', $period->id) }}" class="flex-1">
                     @csrf
                     <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">
                         <i class="fas fa-calculator mr-2"></i> Generate Payroll

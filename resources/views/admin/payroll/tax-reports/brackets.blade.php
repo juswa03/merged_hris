@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
     <div class="max-w-5xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <a href="{{ route('payroll.tax-reports.index') }}" class="text-blue-600 hover:text-blue-900 mb-4 inline-block">← Back to Tax Reports</a>
+            <a href="{{ route('admin.payroll.tax-reports.index') }}" class="text-blue-600 hover:text-blue-900 mb-4 inline-block">← Back to Tax Reports</a>
             <h1 class="text-4xl font-bold text-slate-900 mb-2">BIR Tax Brackets 2024/2025</h1>
             <p class="text-slate-600">Philippine Bureau of Internal Revenue (BIR) Income Tax Brackets for Individual Employees</p>
         </div>
@@ -224,7 +224,7 @@
 
         <!-- Quick Calculator -->
         <div class="mt-8 flex justify-center">
-            <a href="{{ route('payroll.tax-reports.index') }}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition">
+            <a href="{{ route('admin.payroll.tax-reports.index') }}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition">
                 Back to Tax Reports
             </a>
         </div>

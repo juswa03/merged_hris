@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Enrolled Employees')
 
@@ -11,7 +11,7 @@
             <p class="text-gray-600">Manage employees with registered fingerprint data</p>
         </div>
         <div class="mt-4 md:mt-0">
-            <a href="{{ route('biometric.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out flex items-center">
+            <a href="{{ route('admin.biometric.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out flex items-center">
                 <i class="fas fa-plus mr-2"></i> Enroll New Employee
             </a>
         </div>

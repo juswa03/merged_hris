@@ -68,7 +68,7 @@ class AllowanceController extends Controller
 
         Allowance::create($validated);
 
-        return redirect()->route('allowances.index')
+        return redirect()->route('admin.allowances.index')
             ->with('success', 'Allowance created successfully.');
     }
 
@@ -111,7 +111,7 @@ class AllowanceController extends Controller
         $allowance = Allowance::findOrFail($id);
         $allowance->update($validated);
 
-        return redirect()->route('allowances.index')
+        return redirect()->route('admin.allowances.index')
             ->with('success', 'Allowance updated successfully.');
     }
 
@@ -126,13 +126,13 @@ class AllowanceController extends Controller
         $assignedCount = EmployeeAllowance::where('allowance_id', $id)->count();
 
         if ($assignedCount > 0) {
-            return redirect()->route('allowances.index')
+            return redirect()->route('admin.allowances.index')
                 ->with('error', "Cannot delete allowance. It is assigned to {$assignedCount} employee(s).");
         }
 
         $allowance->delete();
 
-        return redirect()->route('allowances.index')
+        return redirect()->route('admin.allowances.index')
             ->with('success', 'Allowance deleted successfully.');
     }
 
@@ -203,7 +203,7 @@ class AllowanceController extends Controller
             EmployeeAllowance::insert($assignmentsToInsert);
         }
 
-        return redirect()->route('allowances.show', $id)
+        return redirect()->route('admin.allowances.show', $id)
             ->with('success', 'Allowance assigned to ' . count($newEmployeeIds) . ' new employee(s) successfully.');
     }
 

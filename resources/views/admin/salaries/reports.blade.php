@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Salary Reports')
 
@@ -186,7 +186,7 @@
                                     -₱{{ number_format(($employee->position->min_salary ?? 0) - $employee->basic_salary, 2) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="{{ route('salaries.adjust-form', $employee->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <a href="{{ route('admin.salaries.adjust-form', $employee->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                         <i class="fas fa-edit mr-1"></i> Adjust
                                     </a>
                                 </td>
@@ -246,7 +246,7 @@
                                     +₱{{ number_format($employee->basic_salary - ($employee->position->max_salary ?? 0), 2) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="{{ route('salaries.show', $employee->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <a href="{{ route('admin.salaries.show', $employee->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                         <i class="fas fa-eye mr-1"></i> View
                                     </a>
                                 </td>
@@ -310,7 +310,7 @@
                                     {{ $difference > 0 ? '+' : '' }}₱{{ number_format($difference, 2) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="{{ route('salaries.adjust-form', $employee->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <a href="{{ route('admin.salaries.adjust-form', $employee->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                         <i class="fas fa-sync mr-1"></i> Sync
                                     </a>
                                 </td>

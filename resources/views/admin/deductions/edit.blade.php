@@ -11,7 +11,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6">
-        <form action="{{ route('deductions.update', $deduction->id) }}" method="POST">
+        <form action="{{ route('admin.deductions.update', $deduction->id) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -51,7 +51,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-3">
-                <a href="{{ route('deductions.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                <a href="{{ route('admin.deductions.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
                     Cancel
                 </a>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">

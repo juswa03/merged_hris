@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Edit Salary Grade')
 
@@ -135,7 +135,7 @@
                                     class="flex-1 bg-red-100 text-red-700 py-3 rounded-lg hover:bg-red-200 transition-all duration-200 font-semibold">
                                 <i class="fas fa-trash-alt mr-2"></i> Delete
                             </button>
-                            <button type="button" onclick="window.location.href='{{ route('salary-grades.index') }}'"
+                            <button type="button" onclick="window.location.href='{{ route('admin.salary-grades.index') }}'"
                                     class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition-all duration-200 font-semibold">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
@@ -249,7 +249,7 @@ document.getElementById('editSalaryGradeForm').addEventListener('submit', functi
         is_active: formData.get('is_active') ? 1 : 0
     };
 
-    fetch('{{ route("salary-grades.update", $salaryGrade->id) }}', {
+    fetch('{{ route("admin.salary-grades.update", $salaryGrade->id) }}', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -261,7 +261,7 @@ document.getElementById('editSalaryGradeForm').addEventListener('submit', functi
     .then(data => {
         if (data.success) {
             alert(data.message);
-            window.location.href = '{{ route("salary-grades.index") }}';
+            window.location.href = '{{ route("admin.salary-grades.index") }}';
         } else {
             alert('Error: ' + data.message);
         }
@@ -278,7 +278,7 @@ function deleteSalaryGrade() {
         return;
     }
 
-    fetch('{{ route("salary-grades.destroy", $salaryGrade->id) }}', {
+    fetch('{{ route("admin.salary-grades.destroy", $salaryGrade->id) }}', {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -290,7 +290,7 @@ function deleteSalaryGrade() {
     .then(data => {
         if (data.success) {
             alert(data.message);
-            window.location.href = '{{ route("salary-grades.index") }}';
+            window.location.href = '{{ route("admin.salary-grades.index") }}';
         } else {
             alert('Error: ' + data.message);
         }

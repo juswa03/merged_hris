@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Bulk Payment Export')
 
@@ -10,7 +10,7 @@
         description="Generate payment files for bank transfers"
     >
         <x-slot name="actions">
-            <a href="{{ route('payroll.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+            <a href="{{ route('admin.payroll.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
                 <i class="fas fa-arrow-left mr-2"></i> Back to Payroll
             </a>
         </x-slot>
@@ -46,7 +46,7 @@
                 <i class="fas fa-file-csv text-blue-600"></i> Standard Formats
             </h3>
 
-            <form action="{{ route('payroll.generate-bulk-payment', $period) }}" method="POST" class="space-y-3">
+            <form action="{{ route('admin.payroll.generate-bulk-payment', $period) }}" method="POST" class="space-y-3">
                 @csrf
 
                 <!-- CSV Format -->
@@ -91,7 +91,7 @@
                 <i class="fas fa-bank text-green-600"></i> Bank-Specific Formats
             </h3>
 
-            <form action="{{ route('payroll.generate-bulk-payment', $period) }}" method="POST" class="space-y-3">
+            <form action="{{ route('admin.payroll.generate-bulk-payment', $period) }}" method="POST" class="space-y-3">
                 @csrf
 
                 <div class="border border-gray-200 rounded-lg p-3 hover:border-green-500 hover:bg-green-50 transition cursor-pointer">

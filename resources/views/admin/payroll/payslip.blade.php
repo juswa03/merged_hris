@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Payslips')
 
@@ -27,7 +27,7 @@
                 <i class="fas fa-filter mr-2 text-blue-600"></i>
                 Filter Payslips
             </h3>
-            <form method="GET" action="{{ route('payroll.payslips') }}" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <form method="GET" action="{{ route('admin.payroll.payslips') }}" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <!-- Year Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
@@ -99,7 +99,7 @@
 
                 <!-- Actions -->
                 <div class="md:col-span-3 lg:col-span-5 flex justify-end space-x-3 mt-2">
-                    <a href="{{ route('payroll.payslips') }}" class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-300 flex items-center">
+                    <a href="{{ route('admin.payroll.payslips') }}" class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-300 flex items-center">
                         <i class="fas fa-undo mr-2"></i> Reset
                     </a>
                     <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
@@ -213,7 +213,7 @@
             <p class="text-gray-600 mb-4">
                 There are no paid payrolls matching your current filters.
             </p>
-            <a href="{{ route('payroll.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+            <a href="{{ route('admin.payroll.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
                 <i class="fas fa-arrow-left mr-2"></i> Go to Payroll Management
             </a>
         </div>

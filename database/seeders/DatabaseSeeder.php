@@ -16,6 +16,14 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AttendanceTypeSeeder::class,
             AttendanceSourceSeeder::class,
+            AdminUserSeeder::class,
+            HRUserSeeder::class,
+            EmployeeSeeder::class,
+            EmployeeAccountSeeder::class,
+            DeductionsAndAllowancesSeeder::class,
+            PerformanceCriteriaSeeder::class,
+            SalaryGrade2025Seeder::class,
+            DecemberDTRSeeder::class,
         ]);
     }
 }

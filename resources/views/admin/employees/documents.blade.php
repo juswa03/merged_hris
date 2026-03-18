@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="container-fluid px-4">
@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">Document Exports</h1>
-                <a href="{{ route('employees.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.employees.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a href="{{ route('employees.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.employees.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Employee Directory</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -32,7 +32,7 @@
                             <p class="mb-0 text-muted small">Export all employee details and information</p>
                         </a>
                         
-                        <a href="{{ route('departments.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.departments.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Department Report</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -40,7 +40,7 @@
                             <p class="mb-0 text-muted small">Department structure and employee distribution</p>
                         </a>
                         
-                        <a href="{{ route('positions.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.positions.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Position Assignments</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a href="{{ route('salary-grades.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.salary-grades.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Salary Grade Schedule</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -70,7 +70,7 @@
                             <p class="mb-0 text-muted small">All salary grades and steps with amounts</p>
                         </a>
                         
-                        <a href="{{ route('salaries.export-history') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.salaries.export-history') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Salary Adjustment History</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -78,7 +78,7 @@
                             <p class="mb-0 text-muted small">Track all salary changes and adjustments</p>
                         </a>
                         
-                        <a href="{{ route('allowances.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.allowances.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Allowances Master</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -86,7 +86,7 @@
                             <p class="mb-0 text-muted small">All allowance types and configurations</p>
                         </a>
                         
-                        <a href="{{ route('deductions.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.deductions.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Deductions Master</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a href="{{ route('payroll.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.payroll.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Payroll Records</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -116,7 +116,7 @@
                             <p class="mb-0 text-muted small">Complete payroll data with all deductions and allowances</p>
                         </a>
                         
-                        <a href="{{ route('dtr.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.dtr.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Daily Time Records</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -124,7 +124,7 @@
                             <p class="mb-0 text-muted small">DTR entries and attendance records</p>
                         </a>
                         
-                        <a href="{{ route('attendance.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.attendance.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Attendance Summary</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -132,7 +132,7 @@
                             <p class="mb-0 text-muted small">Attendance statistics and summaries</p>
                         </a>
                         
-                        <a href="{{ route('holidays.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.holidays.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Holiday Calendar</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -154,7 +154,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a href="{{ route('performance.reviews.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.performance.reviews.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Performance Reviews</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -162,7 +162,7 @@
                             <p class="mb-0 text-muted small">Employee performance evaluation records</p>
                         </a>
                         
-                        <a href="{{ route('performance.goals.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.performance.goals.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Performance Goals</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -170,7 +170,7 @@
                             <p class="mb-0 text-muted small">Employee goal tracking and progress</p>
                         </a>
                         
-                        <a href="{{ route('biometric.export-enrollments') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.biometric.export-enrollments') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Biometric Enrollments</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -178,7 +178,7 @@
                             <p class="mb-0 text-muted small">Fingerprint enrollment status and details</p>
                         </a>
                         
-                        <a href="{{ route('biometric.export-audit-logs') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.biometric.export-audit-logs') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">Biometric Audit Logs</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -186,7 +186,7 @@
                             <p class="mb-0 text-muted small">System audit and activity logs</p>
                         </a>
 
-                        <a href="{{ route('users.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.users.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">User Accounts</h6>
                                 <span class="badge bg-success">Excel</span>
@@ -194,7 +194,7 @@
                             <p class="mb-0 text-muted small">System user accounts and roles</p>
                         </a>
 
-                        <a href="{{ route('roles.export') }}" class="list-group-item list-group-item-action">
+                        <a href="{{ route('admin.roles.export') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <h6 class="mb-1">System Roles</h6>
                                 <span class="badge bg-success">Excel</span>

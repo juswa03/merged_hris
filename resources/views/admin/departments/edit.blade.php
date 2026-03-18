@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Edit Department')
 
@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3 mb-2">
-            <a href="{{ route('departments.index') }}" class="text-gray-600 hover:text-gray-900">
+            <a href="{{ route('admin.departments.index') }}" class="text-gray-600 hover:text-gray-900">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <h1 class="text-3xl font-bold text-gray-900">Edit Department</h1>
@@ -17,7 +17,7 @@
 
     <!-- Form Card -->
     <div class="max-w-2xl bg-white rounded-lg shadow-md p-6">
-        <form action="{{ route('departments.update', $department->id) }}" method="POST">
+        <form action="{{ route('admin.departments.update', $department->id) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -94,7 +94,7 @@
             <!-- Action Buttons -->
             <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
                 <a
-                    href="{{ route('departments.index') }}"
+                    href="{{ route('admin.departments.index') }}"
                     class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                     <i class="fas fa-times mr-2"></i> Cancel

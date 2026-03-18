@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Department Management')
 
@@ -10,78 +10,23 @@
         description="Manage organization departments and structure"
     >
         <x-slot name="actions">
-            <x-admin.action-button href="{{ route('departments.create') }}" variant="primary" icon="fas fa-plus">
+            <x-admin.action-button href="{{ route('admin.departments.create') }}" variant="primary" icon="fas fa-plus">
                 Add Department
             </x-admin.action-button>
         </x-slot>
     </x-admin.page-header>
 
     <!-- Statistics Cards with Gradients -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <!-- Total Departments -->
-        <div class="group bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Total Departments</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $stats['total_departments'] }}</p>
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-building text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Employees -->
-        <div class="group bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Total Employees</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $stats['total_employees'] }}</p>
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-users text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Departments -->
-        <div class="group bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Active Departments</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $stats['departments_with_employees'] }}</p>
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-check-circle text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Empty Departments -->
-        <div class="group bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <p class="text-white/95 text-sm font-medium uppercase tracking-wide">Empty Departments</p>
-                        <p class="text-3xl font-bold text-white mt-2">{{ $stats['empty_departments'] }}</p>
-                    </div>
-                    <div class="bg-white/20 p-4 rounded-xl">
-                        <i class="fas fa-inbox text-3xl text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <x-admin.gradient-stat-card title="Total Departments" :value="$stats['total_departments']" icon="fas fa-building" gradientFrom="blue-500" gradientTo="blue-600"/>
+        <x-admin.gradient-stat-card title="Total Employees" :value="$stats['total_employees']" icon="fas fa-users" gradientFrom="green-500" gradientTo="green-600"/>
+        <x-admin.gradient-stat-card title="Active Departments" :value="$stats['departments_with_employees']" icon="fas fa-check-circle" gradientFrom="purple-500" gradientTo="purple-600"/>
+        <x-admin.gradient-stat-card title="Empty Departments" :value="$stats['empty_departments']" icon="fas fa-inbox" gradientFrom="orange-500" gradientTo="orange-600"/>
     </div>
 
     <!-- Search Bar -->
     <div class="mb-6">
-        <form action="{{ route('departments.index') }}" method="GET">
+        <form action="{{ route('admin.departments.index') }}" method="GET">
             <div class="max-w-md">
                 <x-admin.search-bar
                     name="search"
@@ -154,7 +99,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <div class="flex justify-center gap-2">
                             <x-admin.action-button
-                                :href="route('departments.show', $department->id)"
+                                :href="route('admin.departments.show', $department->id)"
                                 variant="info"
                                 icon="fas fa-eye"
                                 iconOnly
@@ -162,7 +107,7 @@
                                 title="View Details"
                             />
                             <x-admin.action-button
-                                :href="route('departments.edit', $department->id)"
+                                :href="route('admin.departments.edit', $department->id)"
                                 variant="warning"
                                 icon="fas fa-edit"
                                 iconOnly
@@ -188,7 +133,7 @@
                             title="No departments found"
                             message="Start by creating your first department"
                             actionText="Create Department"
-                            :actionLink="route('departments.create')"
+                            :actionLink="route('admin.departments.create')"
                         />
                     </td>
                 </tr>
@@ -209,7 +154,7 @@
 <script>
 function deleteDepartment(id, name) {
     if (confirm(`Are you sure you want to delete the department "${name}"?`)) {
-        fetch(`/departments/${id}`, {
+        fetch(`/admin/departments/${id}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',

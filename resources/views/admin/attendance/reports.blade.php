@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Attendance Reports')
 
 @section('content')
-<div class="w-full px-6 py-6 max-w-7xl mx-auto">
+<div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
     <x-admin.page-header
         title="Attendance Reports"
@@ -20,7 +20,7 @@
     </x-admin.page-header>
 
     <!-- Report Filters Card -->
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-md border border-blue-200 p-6 mt-8 mb-6">
+    <x-admin.card class="mt-8 mb-6">
         <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <i class="fas fa-filter text-blue-600"></i> Filter Reports
         </h3>
@@ -60,12 +60,12 @@
             </div>
 
             <div class="flex items-end">
-                <button type="button" onclick="generateReport()" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg transition font-medium shadow-md">
+                <button type="button" onclick="generateReport()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition font-medium">
                     <i class="fas fa-sync-alt mr-2"></i> Generate
                 </button>
             </div>
         </form>
-    </div>
+    </x-admin.card>
 
     <!-- Report Container -->
     <div id="reportContainer">
@@ -446,7 +446,7 @@
             detailed: true
         });
 
-        fetch(`{{ route('attendance.index') }}?${params}`)
+        fetch(`{{ route('admin.attendance.index') }}?${params}`)
             .then(response => response.text())
             .then(html => {
                 const parser = new DOMParser();
@@ -516,7 +516,7 @@
 
     function loadDepartmentReport(startDate, endDate) {
         // Fetch department summary data
-        fetch(`{{ route('attendance.department-summary') }}?start_date=${startDate}&end_date=${endDate}`)
+        fetch(`{{ route('admin.attendance.department-summary') }}?start_date=${startDate}&end_date=${endDate}`)
             .then(response => response.json())
             .then(data => {
                 const deptList = document.getElementById('departmentList');
@@ -672,7 +672,7 @@
         const endDate = document.getElementById('endDate').value;
         const departmentId = document.getElementById('departmentFilter').value;
 
-        let url = `{{ route('attendance.export') }}?start_date=${startDate}&end_date=${endDate}`;
+        let url = `{{ route('admin.attendance.export') }}?start_date=${startDate}&end_date=${endDate}`;
         
         if (departmentId) {
             url += `&department_id=${departmentId}`;

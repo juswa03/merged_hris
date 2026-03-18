@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Performance Review Details')
 
@@ -8,7 +8,7 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('performance.reviews.index') }}" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ route('admin.performance.reviews.index') }}" class="text-gray-600 hover:text-gray-900">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
@@ -18,7 +18,7 @@
             </div>
             <div class="flex gap-2">
                 @if($review->status === 'draft')
-                <a href="{{ route('performance.reviews.evaluate', $review->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
+                <a href="{{ route('admin.performance.reviews.evaluate', $review->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
                     <i class="fas fa-edit mr-2"></i> Continue Evaluation
                 </a>
                 @endif

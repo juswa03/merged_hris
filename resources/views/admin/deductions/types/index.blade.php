@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Deduction Types')
 
@@ -12,7 +12,7 @@
                 <p class="mt-2 text-sm text-gray-600">Manage categories for employee deductions</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('deductions.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                <a href="{{ route('admin.deductions.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>Back to Deductions
                 </a>
                 <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
@@ -71,7 +71,7 @@
                             <i class="fas fa-edit"></i>
                         </button>
                         @if($type->deductions_count == 0)
-                        <form action="{{ route('deduction-types.destroy', $type) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this type?');">
+                        <form action="{{ route('admin.deduction-types.destroy', $type) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this type?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900">
@@ -143,7 +143,7 @@
 <script>
     function openCreateModal() {
         document.getElementById('modalTitle').innerText = 'Add Deduction Type';
-        document.getElementById('typeForm').action = "{{ route('deduction-types.store') }}";
+        document.getElementById('typeForm').action = "{{ route('admin.deduction-types.store') }}";
         document.getElementById('methodField').innerHTML = '';
         document.getElementById('name').value = '';
         document.getElementById('description').value = '';
@@ -152,7 +152,7 @@
 
     function openEditModal(id, name, description) {
         document.getElementById('modalTitle').innerText = 'Edit Deduction Type';
-        document.getElementById('typeForm').action = `/deduction-types/${id}`;
+        document.getElementById('typeForm').action = `/admin/deduction-types/${id}`;
         document.getElementById('methodField').innerHTML = '@method("PUT")';
         document.getElementById('name').value = name;
         document.getElementById('description').value = description || '';

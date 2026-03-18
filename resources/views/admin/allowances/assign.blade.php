@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 @section('title', 'Assign Allowance')
 @section('content')
 <div class="container mx-auto px-4 py-6">
@@ -8,7 +8,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
             <div class="bg-white rounded-lg shadow p-6">
-                <form action="{{ route('allowances.storeAssignment', $allowance->id) }}" method="POST">
+                <form action="{{ route('admin.allowances.storeAssignment', $allowance->id) }}" method="POST">
                     @csrf
                     <div class="mb-6 p-4 bg-green-50 rounded-lg">
                         <h3 class="text-sm font-semibold mb-2">Allowance: {{ $allowance->name }}</h3>
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="flex justify-end gap-3">
-                        <a href="{{ route('allowances.show', $allowance->id) }}" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">Cancel</a>
+                        <a href="{{ route('admin.allowances.show', $allowance->id) }}" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">Cancel</a>
                         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
                             <i class="fas fa-user-plus mr-2"></i>Assign
                         </button>

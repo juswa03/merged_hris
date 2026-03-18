@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Edit DTR Entry')
 
@@ -41,7 +41,7 @@
 
     <!-- Edit Form -->
     <div class="bg-white rounded-lg shadow p-6">
-        <form action="{{ route('dtr.update', $dtrEntry->id) }}" method="POST">
+        <form action="{{ route('admin.dtr.update', $dtrEntry->id) }}" method="POST">
             @csrf
             @method('PUT')
 

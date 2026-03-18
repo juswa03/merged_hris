@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\LoginSession;
 use Illuminate\Validation\Rules;
 class LoginController extends Controller
 {
@@ -29,10 +30,9 @@ class LoginController extends Controller
     /**
      * Handle login request
      */
-
     public function login(Request $request)
     {
-
+        try {
             $credentials = $request->validate([
                 'loginEmail' => 'required|email',
                 'loginPassword' => 'required',
@@ -42,18 +42,66 @@ class LoginController extends Controller
                 'email' => $credentials['loginEmail'],
                 'password' => $credentials['loginPassword']
             ])) {
-            $request->session()->regenerate();
+                // Get authenticated user with role relationship loaded
+                $user = Auth::user();
+                
+                // Force reload of role relationship
+                $user->load('role');
+                
+                // Verify user has a valid role
+                if (!$user->role) {
+                    Auth::logout();
+                    $request->session()->invalidate();
+                    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'User role not found. Please contact administrator.'
+                    ], 403)->header('Content-Type', 'application/json');
+                }
+                
+                $request->session()->regenerate();
 
-            return response()->json([
-                'success' => true,
-                'redirect' => route('dashboard')
-            ]);
+                // Track login session
+                try {
+                    LoginSession::create([
+                        'user_id'          => $user->id,
+                        'session_id'       => $request->session()->getId(),
+                        'ip_address'       => $request->ip(),
+                        'user_agent'       => $request->userAgent(),
+                        'logged_in_at'     => now(),
+                        'last_activity_at' => now(),
+                    ]);
+                } catch (\Exception $e) {
+                    // Non-critical — do not block login
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'redirect' => route('dashboard'),
+                    'user' => [
+                        'id' => $user->id,
+                        'email' => $user->email,
+                        'role' => $user->role->name ?? 'Unknown'
+                    ]
+                ])->header('Content-Type', 'application/json');
             }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Incorrect Username or Password.'
-        ], 401);
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid email or password. Please try again.'
+            ], 401)->header('Content-Type', 'application/json');
+            
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Login error: ' . $e->getMessage(), [
+                'email' => $request->input('loginEmail'),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during login. Please try again.'
+            ], 500)->header('Content-Type', 'application/json');
+        }
     }
 
     /**
@@ -61,6 +109,15 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // Mark the session as logged out
+        try {
+            LoginSession::where('session_id', $request->session()->getId())
+                ->whereNull('logged_out_at')
+                ->update(['logged_out_at' => now()]);
+        } catch (\Exception $e) {
+            // Non-critical
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
