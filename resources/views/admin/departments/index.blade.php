@@ -3,17 +3,20 @@
 @section('title', 'Department Management')
 
 @section('content')
+@php $isHR = request()->routeIs('hr.*'); @endphp
 <div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
     <x-admin.page-header
         title="Department Management"
-        description="Manage organization departments and structure"
+        description="{{ $isHR ? 'View organization departments and structure' : 'Manage organization departments and structure' }}"
     >
+        @if(!$isHR)
         <x-slot name="actions">
             <x-admin.action-button href="{{ route('admin.departments.create') }}" variant="primary" icon="fas fa-plus">
                 Add Department
             </x-admin.action-button>
         </x-slot>
+        @endif
     </x-admin.page-header>
 
     <!-- Statistics Cards with Gradients -->
@@ -26,7 +29,7 @@
 
     <!-- Search Bar -->
     <div class="mb-6">
-        <form action="{{ route('admin.departments.index') }}" method="GET">
+        <form action="{{ $isHR ? route('hr.departments.index') : route('admin.departments.index') }}" method="GET">
             <div class="max-w-md">
                 <x-admin.search-bar
                     name="search"
@@ -99,13 +102,14 @@
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <div class="flex justify-center gap-2">
                             <x-admin.action-button
-                                :href="route('admin.departments.show', $department->id)"
+                                :href="$isHR ? route('hr.departments.show', $department->id) : route('admin.departments.show', $department->id)"
                                 variant="info"
                                 icon="fas fa-eye"
                                 iconOnly
                                 size="sm"
                                 title="View Details"
                             />
+                            @if(!$isHR)
                             <x-admin.action-button
                                 :href="route('admin.departments.edit', $department->id)"
                                 variant="warning"
@@ -122,12 +126,20 @@
                                 title="Delete"
                                 onclick="deleteDepartment({{ $department->id }}, '{{ $department->name }}')"
                             />
+                            @endif
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="5">
+                        @if($isHR)
+                        <x-admin.empty-state
+                            icon="fas fa-building"
+                            title="No departments found"
+                            message="Contact an administrator to create departments"
+                        />
+                        @else
                         <x-admin.empty-state
                             icon="fas fa-building"
                             title="No departments found"
@@ -135,6 +147,7 @@
                             actionText="Create Department"
                             :actionLink="route('admin.departments.create')"
                         />
+                        @endif
                     </td>
                 </tr>
                 @endforelse

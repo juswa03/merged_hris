@@ -3,16 +3,19 @@
 @section('title', 'Salary Grade Management')
 
 @section('content')
+@php $isHR = request()->routeIs('hr.*'); @endphp
 <div class="container mx-auto px-4 py-6">
     <x-admin.page-header
         title="Salary Grade Management"
-        description="Manage government salary schedules and employee salary grades"
+        description="{{ $isHR ? 'View government salary schedules and employee salary grades' : 'Manage government salary schedules and employee salary grades' }}"
     >
+        @if(!$isHR)
         <x-slot name="actions">
             <x-admin.action-button onclick="deleteSchedule()" variant="danger" icon="fas fa-trash-alt">Delete Schedule</x-admin.action-button>
             <x-admin.action-button onclick="updateAllEmployeeSalaries()" variant="success" icon="fas fa-sync">Update All Employee Salaries</x-admin.action-button>
             <x-admin.action-button href="{{ route('admin.salary-grades.create') }}" variant="primary" icon="fas fa-plus">Add New Schedule</x-admin.action-button>
         </x-slot>
+        @endif
     </x-admin.page-header>
 
     <!-- Statistics Cards -->
@@ -30,7 +33,7 @@
 
     <!-- Schedule Selector -->
     <x-admin.card class="mb-6">
-        <form action="{{ route('admin.salary-grades.index') }}" method="GET">
+        <form action="{{ $isHR ? route('hr.salary-grades.index') : route('admin.salary-grades.index') }}" method="GET">
             <div class="flex items-center gap-3">
                 <label class="text-sm font-medium text-gray-700">Salary Schedule:</label>
                 <select name="effective_date" onchange="this.form.submit()" class="block w-full md:w-72 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -65,10 +68,14 @@
                         @php $stepData = $steps->get($stepNum); @endphp
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 group relative">
                             @if($stepData)
+                                @if($isHR)
+                                    <span class="font-medium">₱{{ number_format($stepData->amount, 2) }}</span>
+                                @else
                                 <a href="{{ route('admin.salary-grades.edit', $stepData->id) }}" class="block w-full h-full hover:text-blue-600 transition-colors" title="Click to edit">
                                     <span class="font-medium">₱{{ number_format($stepData->amount, 2) }}</span>
                                     <i class="fas fa-pencil-alt absolute top-1/2 right-2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 text-gray-400 text-xs"></i>
                                 </a>
+                                @endif
                             @else
                                 <span class="text-gray-400">-</span>
                             @endif
@@ -78,6 +85,13 @@
                 @empty
                 <tr>
                     <td colspan="9">
+                        @if($isHR)
+                        <x-admin.empty-state
+                            icon="fas fa-table"
+                            title="No salary grades found"
+                            message="Contact an administrator to create salary schedules"
+                        />
+                        @else
                         <x-admin.empty-state
                             icon="fas fa-table"
                             title="No salary grades found"
@@ -85,6 +99,7 @@
                             actionText="Add New Schedule"
                             :actionLink="route('admin.salary-grades.create')"
                         />
+                        @endif
                     </td>
                 </tr>
                 @endforelse

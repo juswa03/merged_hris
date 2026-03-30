@@ -3,16 +3,19 @@
 @section('title', 'Position Management')
 
 @section('content')
+@php $isHR = request()->routeIs('hr.*'); @endphp
 <div class="container mx-auto px-4 py-6">
     <x-admin.page-header
         title="Position Management"
-        description="Manage organizational positions and job titles"
+        description="{{ $isHR ? 'View organizational positions and job titles' : 'Manage organizational positions and job titles' }}"
     >
+        @if(!$isHR)
         <x-slot name="actions">
             <x-admin.action-button href="{{ route('admin.positions.create') }}" variant="primary" icon="fas fa-plus">
                 Add Position
             </x-admin.action-button>
         </x-slot>
+        @endif
     </x-admin.page-header>
 
     <!-- Statistics Cards -->
@@ -30,7 +33,7 @@
 
     <!-- Filters -->
     <x-admin.card title="Filters" class="mb-6">
-        <form action="{{ route('admin.positions.index') }}" method="GET" class="flex flex-col md:flex-row gap-3">
+        <form action="{{ $isHR ? route('hr.positions.index') : route('admin.positions.index') }}" method="GET" class="flex flex-col md:flex-row gap-3">
             <div class="relative flex-1 md:max-w-xs">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <i class="fas fa-search text-gray-400"></i>
@@ -51,7 +54,7 @@
                 <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactive</option>
             </select>
             <x-admin.action-button type="submit" variant="primary" icon="fas fa-search">Search</x-admin.action-button>
-            <x-admin.action-button href="{{ route('admin.positions.index') }}" variant="secondary" icon="fas fa-times">Reset</x-admin.action-button>
+            <x-admin.action-button href="{{ $isHR ? route('hr.positions.index') : route('admin.positions.index') }}" variant="secondary" icon="fas fa-times">Reset</x-admin.action-button>
         </form>
     </x-admin.card>
 
@@ -116,23 +119,38 @@
                         </x-admin.badge>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
+                        @if($isHR)
+                        <x-admin.badge :variant="$position->is_active ? 'success' : 'danger'">
+                            {{ $position->is_active ? 'Active' : 'Inactive' }}
+                        </x-admin.badge>
+                        @else
                         <button onclick="toggleStatus({{ $position->id }})" class="cursor-pointer">
                             <x-admin.badge :variant="$position->is_active ? 'success' : 'danger'">
                                 {{ $position->is_active ? 'Active' : 'Inactive' }}
                             </x-admin.badge>
                         </button>
+                        @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <div class="flex justify-center gap-2">
-                            <x-admin.action-button :href="route('admin.positions.show', $position->id)" variant="info" icon="fas fa-eye" iconOnly size="sm" title="View Details"/>
+                            <x-admin.action-button :href="$isHR ? route('hr.positions.show', $position->id) : route('admin.positions.show', $position->id)" variant="info" icon="fas fa-eye" iconOnly size="sm" title="View Details"/>
+                            @if(!$isHR)
                             <x-admin.action-button :href="route('admin.positions.edit', $position->id)" variant="warning" icon="fas fa-edit" iconOnly size="sm" title="Edit"/>
                             <x-admin.action-button variant="danger" icon="fas fa-trash" iconOnly size="sm" title="Delete" onclick="deletePosition({{ $position->id }}, '{{ addslashes($position->name) }}')"/>
+                            @endif
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7">
+                        @if($isHR)
+                        <x-admin.empty-state
+                            icon="fas fa-briefcase"
+                            title="No positions found"
+                            message="Contact an administrator to create positions"
+                        />
+                        @else
                         <x-admin.empty-state
                             icon="fas fa-briefcase"
                             title="No positions found"
@@ -140,6 +158,7 @@
                             actionText="Create Position"
                             :actionLink="route('admin.positions.create')"
                         />
+                        @endif
                     </td>
                 </tr>
                 @endforelse

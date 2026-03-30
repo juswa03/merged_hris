@@ -3,12 +3,13 @@
 @section('title', 'Department Details')
 
 @section('content')
+@php $isHR = request()->routeIs('hr.*'); @endphp
 <div class="container mx-auto px-4 py-6">
     <!-- Page Header -->
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('admin.departments.index') }}" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ $isHR ? route('hr.departments.index') : route('admin.departments.index') }}" class="text-gray-600 hover:text-gray-900">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
@@ -16,6 +17,7 @@
                     <p class="text-sm text-gray-600 mt-1">Department Details</p>
                 </div>
             </div>
+            @if(!$isHR)
             <div class="flex gap-2">
                 <a href="{{ route('admin.departments.edit', $department->id) }}" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md">
                     <i class="fas fa-edit mr-2"></i> Edit
@@ -24,6 +26,7 @@
                     <i class="fas fa-trash mr-2"></i> Delete
                 </button>
             </div>
+            @endif
         </div>
     </div>
 
